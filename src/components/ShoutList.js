@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import 'react-confirm-alert/src/react-confirm-alert.css'
-import Grid from "@material-ui/core/Grid";
+
 import AddShout from "./AddShout.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {SERVER_URL} from '../constants.js';
+import Grid from "@material-ui/core/Grid";
+
 
 class ShoutList extends Component {
     constructor(props) {
