@@ -20,7 +20,7 @@ class ShoutList extends Component {
 
     fetchShouts = () => {
 
-        fetch('/findall')
+        fetch('https://dayshoutbackend.herokuapp.com/findall')
             .then((response) => response.json())
             .then((responseData) => {
                 this.setState({
@@ -33,7 +33,7 @@ class ShoutList extends Component {
 
     // Add new shout
     addShout(shout) {
-        fetch('/shouts',
+        fetch('https://dayshoutbackend.herokuapp.com/shouts',
             {   method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
