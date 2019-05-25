@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import 'react-table/react-table.css';
-import 'react-confirm-alert/src/react-confirm-alert.css'
 import ShoutList from "./components/ShoutList";
 
 
