@@ -7,6 +7,7 @@ import AddShout from "./AddShout.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {SERVER_URL} from '../constants.js';
+import Grid from "@material-ui/core/Grid";
 
 
 
@@ -105,9 +106,11 @@ class ShoutList extends Component {
         return (
             <div className="App">
 
-
+                <Grid container>
+                    <Grid item>
                         <AddShout addShout={this.addShout} fetchShouts={this.fetchShouts}/>
-
+                    </Grid>
+                </Grid>
 
                 <ReactTable data={this.state.shouts} columns={columns}
                             filterable={true} pageSize={10}/>
