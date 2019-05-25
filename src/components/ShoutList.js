@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import AddShout from "./AddShout.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import {SERVER_URL} from '../constants.js';
 
 class ShoutList extends Component {
     constructor(props) {
@@ -20,7 +20,7 @@ class ShoutList extends Component {
 
     fetchShouts = () => {
 
-        fetch('https://dayshoutbackend.herokuapp.com/findall')
+        fetch(SERVER_URL+'/findall')
             .then((response) => response.json())
             .then((responseData) => {
                 this.setState({
@@ -33,7 +33,7 @@ class ShoutList extends Component {
 
     // Add new shout
     addShout(shout) {
-        fetch('https://dayshoutbackend.herokuapp.com/shouts',
+        fetch(SERVER_URL+'/shouts',
             {   method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
