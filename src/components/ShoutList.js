@@ -33,7 +33,7 @@ class ShoutList extends Component {
 
     // Add new shout
     addShout(shout) {
-        fetch('/api/shouts',
+        fetch('/shouts',
             {   method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
