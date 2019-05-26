@@ -13,13 +13,16 @@ import Grid from "@material-ui/core/Grid";
 
 
 class ShoutList extends Component {
+
     constructor(props) {
         super(props);
         this.state = { shouts: [], open: false, message: ''};
+
     }
 
     componentDidMount() {
         this.fetchShouts();
+
     }
 
     fetchShouts = () => {
@@ -37,7 +40,8 @@ class ShoutList extends Component {
 
     // Add new shout
     addShout(shout) {
-        fetch(SERVER_URL+'/shouts',
+
+        fetch(SERVER_URL+'/add',
             {   method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -108,7 +112,7 @@ class ShoutList extends Component {
 
                 <Grid container>
                     <Grid item>
-                        <AddShout addShout={this.addShout} fetchShouts={this.fetchShouts}/>
+                        <AddShout addShout={this.addShout} fetchShouts={this.fetchShouts} myUserLocation = {this.props.myUserLocation}/>
                     </Grid>
                 </Grid>
 
