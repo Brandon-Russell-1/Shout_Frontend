@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import ReactTable from "react-table";
-import 'react-table/react-table.css';
-import 'react-confirm-alert/src/react-confirm-alert.css'
+import ReactTable from "react-table"; //MIT
+import 'react-table/react-table.css'; //MIT
+import 'react-confirm-alert/src/react-confirm-alert.css' //MIT
 
 import AddShout from "./AddShout.js";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'; //MIT
+import 'react-toastify/dist/ReactToastify.css'; //MIT
 import {SERVER_URL} from '../constants.js';
-import Grid from "@material-ui/core/Grid";
+import Grid from "@material-ui/core/Grid"; //MIT
 
 
 
@@ -23,6 +23,7 @@ class ShoutList extends Component {
     componentDidMount() {
         this.fetchShouts();
 
+
     }
 
     fetchShouts = () => {
@@ -30,13 +31,19 @@ class ShoutList extends Component {
         fetch(SERVER_URL+'/findall')
             .then((response) => response.json())
             .then((responseData) => {
+
+
                 this.setState({
                     shouts: responseData,
                 });
+                this.props.callbackFromParent(responseData);
             })
             .catch(err => console.error(err));
 
+
     }
+
+
 
     // Add new shout
     addShout(shout) {
@@ -84,10 +91,6 @@ class ShoutList extends Component {
     render() {
 
         const columns = [{
-            Header: 'id',
-            accessor: 'id',
-            Cell: this.renderEditable
-        }, {
             Header: 'Date Entered',
             accessor: 'shoutDate',
             Cell: this.renderEditable
@@ -96,7 +99,7 @@ class ShoutList extends Component {
             accessor: 'shoutEntry',
             Cell: this.renderEditable,
             width: 500
-        }, {
+        }/*, {
             Header: 'Shout Lat',
             accessor: 'shoutLat',
             Cell: this.renderEditable
@@ -104,8 +107,7 @@ class ShoutList extends Component {
             Header: 'Shout Long',
             accessor: 'shoutLong',
             Cell: this.renderEditable
-        }]
-
+        }*/]
 
         return (
             <div className="App">
@@ -117,7 +119,7 @@ class ShoutList extends Component {
                 </Grid>
 
                 <ReactTable data={this.state.shouts} columns={columns}
-                            filterable={true} pageSize={10}/>
+                            filterable={true} pageSize={15}/>
 
                 <ToastContainer autoClose={1500}/>
             </div>

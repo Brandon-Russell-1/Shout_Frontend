@@ -1,7 +1,7 @@
 import React from 'react';
-import SkyLight from 'react-skylight';
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import SkyLight from 'react-skylight'; //MIT
+import TextField from "@material-ui/core/TextField"; //MIT
+import Button from "@material-ui/core/Button"; //MIT
 
 
 
@@ -44,11 +44,12 @@ class AddShout extends React.Component {
                     <h3>New Shout</h3>
                     <form>
 
-                        <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} /><br/>
+                        <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} fullWidth /><br/>
 
-
+                        <br/>
                         <Button variant="outlined" style={{marginRight: 10}} color="primary" onClick={this.handleSubmit}>Save</Button>
                         <Button variant="outlined" color="secondary" onClick={this.cancelSubmit}>Cancel</Button>
+
                     </form>
                 </SkyLight>
                 <div>
