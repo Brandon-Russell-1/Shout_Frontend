@@ -28,7 +28,7 @@ class ShoutList extends Component {
 
     fetchShouts = () => {
 
-        fetch(SERVER_URL+'/findall')
+        fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng)
             .then((response) => response.json())
             .then((responseData) => {
 
