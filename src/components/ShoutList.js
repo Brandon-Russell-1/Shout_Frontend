@@ -28,15 +28,15 @@ class ShoutList extends Component {
 //        fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng)
     fetchShouts = () => {
 
-        fetch(SERVER_URL+'/findall')
+        fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng)
             .then((response) => response.json())
             .then((responseData) => {
-
+console.log()
 
                 this.setState({
-                    shouts: responseData,
+                    shouts: responseData['_embedded']['shouts'],
                 });
-                this.props.callbackFromParent(responseData);
+                this.props.callbackFromParent(responseData['_embedded']['shouts']);
             })
             .catch(err => console.error(err));
 
