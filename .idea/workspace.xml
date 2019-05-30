@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="988d47bf-f915-4d8f-9625-780fb2840ac7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ShoutList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ShoutList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapTest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MapTest.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/App.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="357">
+              <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -28,11 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="849">
+            <state relative-caret-position="288">
               <caret line="72" selection-start-line="72" selection-end-line="72" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -40,8 +39,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/MapTest.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="41" lean-forward="true" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
+            <state relative-caret-position="493">
+              <caret line="47" column="69" selection-start-line="47" selection-start-column="69" selection-end-line="47" selection-end-column="69" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -50,26 +49,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/components/ShoutList.js">
+        <entry file="file://$PROJECT_DIR$/src/components/MapTestBackup1.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="30" column="147" selection-start-line="30" selection-start-column="147" selection-end-line="30" selection-end-column="147" />
+            <state relative-caret-position="84">
+              <caret line="43" column="24" lean-forward="true" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
               <folding>
-                <element signature="e#0#41#0" expanded="true" />
-                <element signature="e#194#231#0" expanded="true" />
-                <element signature="e#348#391#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/AddShout.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="543">
-              <caret line="48" column="29" lean-forward="true" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
+                <element signature="e#0#40#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -99,6 +84,8 @@
       <find>console.log</find>
       <find>myUserLocation</find>
       <find>shouts</find>
+      <find>map</find>
+      <find>onClick</find>
     </findStrings>
     <replaceStrings>
       <replace>shouts</replace>
@@ -116,21 +103,29 @@
         <option value="$PROJECT_DIR$/src/components/CurrentLocation.js" />
         <option value="$PROJECT_DIR$/src/components/MapContainer.js" />
         <option value="$PROJECT_DIR$/src/components/FooterPage.js" />
-        <option value="$PROJECT_DIR$/src/App.css" />
         <option value="$PROJECT_DIR$/src/components/Map.js" />
         <option value="$PROJECT_DIR$/src/App.js" />
-        <option value="$PROJECT_DIR$/src/components/MapTest.js" />
         <option value="$PROJECT_DIR$/src/components/AddShout.js" />
         <option value="$PROJECT_DIR$/src/components/ShoutList.js" />
+        <option value="$PROJECT_DIR$/src/App.css" />
+        <option value="$PROJECT_DIR$/src/components/MapTestBackup.js" />
+        <option value="$PROJECT_DIR$/src/components/MapTestBackup1.js" />
+        <option value="$PROJECT_DIR$/src/components/MapTest.js" />
       </list>
     </option>
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
   </component>
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="267" />
-    <option name="y" value="3" />
+    <option name="x" value="138" />
+    <option name="y" value="19" />
     <option name="width" value="1561" />
     <option name="height" value="1047" />
   </component>
@@ -175,7 +170,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -185,6 +180,11 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rbran\IdeaProjects\dayshout_frontend\src\components" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -219,12 +219,12 @@
       <option name="presentableId" value="Default" />
       <updated>1558562519862</updated>
       <workItem from="1558562521128" duration="5927000" />
-      <workItem from="1558571031502" duration="85621000" />
+      <workItem from="1558571031502" duration="101480000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91548000" />
+    <option name="totallyTimeSpent" value="107407000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -236,8 +236,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="267" y="3" width="1561" height="1047" extended-state="0" />
-    <editor active="true" />
+    <frame x="138" y="19" width="1561" height="1047" extended-state="0" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1661195" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -371,49 +370,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/MapContainer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Map.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1173">
           <caret line="69" column="1" selection-start-line="69" selection-start-column="1" selection-end-line="69" selection-end-column="1" />
           <folding>
             <element signature="e#1#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/CurrentLocation.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16">
-          <caret line="54" column="46" lean-forward="true" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="849">
-          <caret line="72" selection-start-line="72" selection-end-line="72" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -428,24 +390,77 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/MapTest.js">
+    <entry file="file://$PROJECT_DIR$/src/App.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="41" lean-forward="true" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
+        <state relative-caret-position="357">
+          <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/ShoutList.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="30" column="147" selection-start-line="30" selection-start-column="147" selection-end-line="30" selection-end-column="147" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#194#231#0" expanded="true" />
+            <element signature="e#348#391#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/MapTestBackup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-306">
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/ShoutList.js">
+    <entry file="file://$PROJECT_DIR$/src/components/CurrentLocation.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="30" column="147" selection-start-line="30" selection-start-column="147" selection-end-line="30" selection-end-column="147" />
+        <state relative-caret-position="-561">
+          <caret line="54" column="46" lean-forward="true" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/MapContainer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
-            <element signature="e#194#231#0" expanded="true" />
-            <element signature="e#348#391#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="72" selection-start-line="72" selection-end-line="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/MapTest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="47" column="69" selection-start-line="47" selection-start-column="69" selection-end-line="47" selection-end-column="69" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/MapTestBackup1.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="43" column="24" lean-forward="true" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
           </folding>
         </state>
       </provider>

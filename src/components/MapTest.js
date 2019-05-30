@@ -1,70 +1,71 @@
-import React, { Component } from "react"
-import { compose } from "recompose"
-import {
-    withScriptjs,
-    withGoogleMap,
-    GoogleMap,
-    Marker,
-    InfoWindow
-} from "react-google-maps"
+import React, { Component } from 'react'
+import {GoogleMap, withGoogleMap, withScriptjs, Marker, InfoWindow} from 'react-google-maps'
 
-const MapWithAMarker = compose(withScriptjs, withGoogleMap)(props => {
 
-    return (
-        <GoogleMap defaultZoom={15} defaultCenter={props.theUserLocation}>
-            {props.markers.map(marker => {
-                const onClick = props.onClick.bind(this, marker)
-                return (
-                    <Marker
-                        key={marker.id}
-                        onClick={onClick}
-                        position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
-                    >
-                        {props.selectedMarker === marker &&
-                        <InfoWindow>
-                            <div>
-                                {marker.shoutEntry}
-                            </div>
-                        </InfoWindow>}
+class ShelterMap extends Component {
+    map: React.RefObject<GoogleMap>
 
-                    </Marker>
-                )
-            })}
-        </GoogleMap>
-    )
-})
-
-export default class ShelterMap extends Component {
-    constructor(props) {
+    constructor(props: any) {
         super(props)
         this.state = {
-            shelters: [],
-            selectedMarker: false
+            markers: [],
+            selectedMarker: false,
+            zoomLevel: 15
         }
+        this.map = React.createRef()
     }
-    componentDidMount() {
-        fetch("https://api.harveyneeds.org/api/v1/shelters?limit=20")
-            .then(r => r.json())
-            .then(data => {
-                this.setState({ shelters: data.shelters })
-            })
+
+    onZoomChanged = () => {
+        //[ts] Property 'getZoom' does not exist on type 'RefObject<GoogleMap>'
+        const zoom = this.map.current.getZoom()
+
+        alert(zoom)
     }
     handleClick = (marker, event) => {
 
         this.setState({ selectedMarker: marker })
     }
     render() {
+
+
         return (
-            <MapWithAMarker
-                selectedMarker={this.state.selectedMarker}
-                markers={this.props.myMapShouts}
-                onClick={this.handleClick}
+            <GoogleMap
                 googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL2VpoycKtKH9ui3tr-TfUlH7L27zVZyA&callback=initMap"
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `100%` }} />}
                 mapElement={<div style={{ height: `100%` }} />}
-                theUserLocation={this.props.myUserLocation}
-            />
+                ref={this.map}
+                zoom={this.props.zoom}
+                center={this.props.myUserLocation}
+                onClick={this.handleClick}
+                onZoomChanged={this.onZoomChanged}
+                markers={this.props.myMapShouts}
+
+
+            >
+
+                {this.props.markers.map(marker => {
+                    const onClick = this.props.onClick.bind(this, marker)
+                    return (
+                        <Marker
+                            key={marker.id}
+                            onClick={onClick}
+                            position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
+                        >
+                            {this.props.selectedMarker === marker &&
+                            <InfoWindow>
+                                <div>
+                                    {marker.shoutEntry}
+                                </div>
+                            </InfoWindow>}
+
+                        </Marker>
+                    )
+                })}
+
+            </GoogleMap>
         )
     }
 }
+
+export default withScriptjs(withGoogleMap(Map))

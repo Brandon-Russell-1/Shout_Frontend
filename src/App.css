@@ -1,23 +1,26 @@
 .App {
   width: 100%;
+
   margin: auto;
 }
 
 .App-header {
-  background-color: #2f3f99;
-  height: 50px;
+  background-color: #181899;
+  height: 11px;
   padding: 20px;
   color: #ffffff;
 }
 
 .App-title {
-  font-size: 2.4em;
-  font-family: Helvetica;
+  font-size: 16px;
+  font-family: "Myriad Pro";
+  letter-spacing: 3.2px;
+  text-align: left;
 }
 
 .App-footer {
-  background-color: #2f3f99;
-  height: 50px;
+  background-color: #181899;
+  height: 11px;
   padding: 20px;
   color: #ffffff;
 }
