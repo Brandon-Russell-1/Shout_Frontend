@@ -15,8 +15,8 @@ const MapWithAMarker = compose(withScriptjs, withGoogleMap)(props => {
             defaultZoom={15}
             defaultCenter={props.theUserLocation}
 
-            onZoomChanged={props.onZoomChanged}>
 
+        >
             {props.markers.map(marker => {
                 const onClick = props.onClick.bind(this, marker)
                 return (
@@ -51,11 +51,7 @@ export default class ShelterMap extends Component {
         }
     }
     componentDidMount() {
-        fetch("https://api.harveyneeds.org/api/v1/shelters?limit=20")
-            .then(r => r.json())
-            .then(data => {
-                this.setState({ shelters: data.shelters })
-            })
+
     }
 
 
@@ -64,12 +60,6 @@ export default class ShelterMap extends Component {
         this.setState({ selectedMarker: marker })
     }
 
-    _handleZoomChanged() {
-        this.setState({zoomLevel: this.refs.map.getZoom()});
-        console.log(this.state.zoomLevel);
-        console.log("test");
-
-    }
 
     render() {
 
@@ -83,7 +73,7 @@ export default class ShelterMap extends Component {
                 containerElement={<div style={{ height: `100%` }} />}
                 mapElement={<div style={{ height: `100%` }} />}
                 theUserLocation={this.props.myUserLocation}
-                onZoomChanged={this._handleZoomChanged}
+
             />
         )
     }

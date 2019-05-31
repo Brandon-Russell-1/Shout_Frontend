@@ -2,9 +2,67 @@ import React, { Component } from 'react';
 import './App.css';
 import ShoutList from "./components/ShoutList";
 import Grid from "@material-ui/core/Grid"; //MIT
-import { GoogleApiWrapper, withScriptJS,InfoWindow, Map, Marker, GoogleMap } from "google-maps-react"; //MIT
-import ShelterMap from "./components/MapTest";
+//import ShelterMap from "./components/MapTest";
 
+
+
+const { compose, withProps, withState, withHandlers } = require("recompose");
+
+const {
+    withScriptjs,
+    withGoogleMap,
+    GoogleMap,
+    Marker,
+    InfoWindow,
+} = require("react-google-maps");
+
+const MapWithControlledZoom = compose(
+    withProps({
+        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDL2VpoycKtKH9ui3tr-TfUlH7L27zVZyA&v=3.exp&libraries=geometry,drawing,places",
+        loadingElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `100%` }} />,
+        mapElement: <div style={{ height: `100%` }} />,
+    }),
+    withState('zoom', 'onZoomChange', 8),
+    withHandlers(() => {
+        const refs = {
+            map: undefined,
+        }
+
+        return {
+            onMapMounted: () => ref => {
+                refs.map = ref
+            },
+            onZoomChanged: ({ onZoomChange }) => () => {
+                onZoomChange(refs.map.getZoom())
+            }
+        }
+    }),
+    withScriptjs,
+    withGoogleMap
+)
+
+(props =>
+    <GoogleMap
+        defaultCenter={{ lat: -32, lng: 81 }}
+        zoom={props.zoom}
+        ref={props.onMapMounted}
+        onZoomChanged={props.onZoomChanged}
+    >
+        <Marker
+            position={{ lat: -34.397, lng: 150.644 }}
+            onClick={props.onToggleOpen}
+        >
+            <InfoWindow onCloseClick={props.onToggleOpen}>
+                <div>
+
+                    {" "}
+                    Controlled zoom: {props.zoom}
+                </div>
+            </InfoWindow>
+        </Marker>
+    </GoogleMap>
+);
 
 
 class App extends Component {
@@ -82,7 +140,8 @@ class App extends Component {
               </Grid>
 
               <Grid item xs={6}>
-                  <ShelterMap myUserLocation = {userLocation} myMapShouts = {this.state.mapShouts}/>
+                  <MapWithControlledZoom />
+
               </Grid>
 
           </Grid>
@@ -95,6 +154,4 @@ class App extends Component {
   }
 }
 
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyDL2VpoycKtKH9ui3tr-TfUlH7L27zVZyA'
-})(App);
+export default App
