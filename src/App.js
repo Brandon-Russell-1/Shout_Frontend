@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import ShoutList from "./components/ShoutList";
 import Grid from "@material-ui/core/Grid"; //MIT
-//import ShelterMap from "./components/MapTest";
 
 
 
 const { compose, withProps, withState, withHandlers } = require("recompose");
-
 const {
     withScriptjs,
     withGoogleMap,
@@ -18,9 +16,9 @@ const {
 
 const MapWithControlledZoom = compose(
     withProps({
-        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDL2VpoycKtKH9ui3tr-TfUlH7L27zVZyA&v=3.exp&libraries=geometry,drawing,places",
+        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyB_hkyArIHX2mBEsaWfcPUwjqv9_rNhCro&v=3.exp&libraries=geometry,drawing,places",
         loadingElement: <div style={{ height: `100%` }} />,
-        containerElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `800px` }} />,
         mapElement: <div style={{ height: `100%` }} />,
     }),
     withState('zoom', 'onZoomChange', 8),
@@ -34,35 +32,44 @@ const MapWithControlledZoom = compose(
                 refs.map = ref
             },
             onZoomChanged: ({ onZoomChange }) => () => {
+
                 onZoomChange(refs.map.getZoom())
+                console.log(refs.map.getZoom())
             }
         }
     }),
     withScriptjs,
     withGoogleMap
-)
-
-(props =>
+)(props =>
     <GoogleMap
-        defaultCenter={{ lat: -32, lng: 81 }}
-        zoom={props.zoom}
+        center={props.myUserLocation}
+        zoom={props.myZoom}
         ref={props.onMapMounted}
-        onZoomChanged={props.onZoomChanged}
+        onZoomChanged={props.onZoomHandle.bind(this,props.onZoomChanged)}
     >
-        <Marker
-            position={{ lat: -34.397, lng: 150.644 }}
-            onClick={props.onToggleOpen}
-        >
-            <InfoWindow onCloseClick={props.onToggleOpen}>
-                <div>
 
-                    {" "}
-                    Controlled zoom: {props.zoom}
-                </div>
-            </InfoWindow>
-        </Marker>
+        {props.markers.map(marker => {
+            const onClick = props.onMarkerClick.bind(this, marker)
+            return (
+                <Marker
+                    key={marker.id}
+                    onClick={onClick}
+                    position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
+                >
+                    {props.selectedMarker === marker &&
+                    <InfoWindow>
+                        <div>
+                            {marker.shoutEntry + ":" + props.zoom}
+                        </div>
+                    </InfoWindow>}
+
+                </Marker>
+            )
+        })}
+
     </GoogleMap>
 );
+
 
 
 class App extends Component {
@@ -71,33 +78,26 @@ class App extends Component {
         this.state = { userLocation: { lat: 32, lng: 32 },
             mapShouts: [],
             loading: true,
-            showingInfoWindow: false,
-            activeMarker: {},
-            selectedPlace: {}};
-        // binding this to event-handler functions
-
-        this.onMarkerClick = this.onMarkerClick.bind(this);
-        this.onMapClick = this.onMapClick.bind(this);
+            selectedMarker: false,
+            zoomLevel: 15
+            };
 
     }
 
-    onMarkerClick = (props, marker, e) => {
-        this.setState({
-            selectedPlace: props,
-            activeMarker: marker,
-            showingInfoWindow: true
-        });
-    }
-    onMapClick = (props) => {
-        if (this.state.showingInfoWindow) {
-            this.setState({
-                showingInfoWindow: false,
-                activeMarker: null
-            });
-        }
+
+
+
+    handleClick = (marker, event) => {
+
+        this.setState({ selectedMarker: marker })
     }
 
-    componentDidMount(props) {
+    handleZoom = (theZoom, event) => {
+
+        this.setState({ zoomLevel: theZoom })
+    }
+
+    componentDidMount() {
         navigator.geolocation.getCurrentPosition(
             position => {
                 const { latitude, longitude } = position.coords;
@@ -111,7 +111,11 @@ class App extends Component {
                 this.setState({ loading: false });
             }
         );
+
+
+
     }
+
 
     myShoutCallback = (callbackshouts) => {
         this.setState({
@@ -123,7 +127,6 @@ class App extends Component {
   render() {
 
       const { loading, userLocation } = this.state;
-      const { google } = this.props;
 
        if (loading) {
           return null;
@@ -140,7 +143,11 @@ class App extends Component {
               </Grid>
 
               <Grid item xs={6}>
-                  <MapWithControlledZoom />
+
+                  <MapWithControlledZoom myUserLocation = {userLocation} markers = {this.state.mapShouts}
+                                         onMarkerClick={this.handleClick} selectedMarker={this.state.selectedMarker}
+                                         myZoom = {this.state.zoomLevel} onZoomHandle = {this.handleZoom}/>
+
 
               </Grid>
 

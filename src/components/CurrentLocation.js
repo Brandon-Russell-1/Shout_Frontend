@@ -40,6 +40,8 @@ export class CurrentLocation extends React.Component {
         const current = this.state.currentLocation;
 
         const google = this.props.google;
+
+        if (!google) return;
         const maps = google.maps;
 
         if (map) {

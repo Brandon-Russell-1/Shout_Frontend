@@ -36,6 +36,7 @@ export class MapContainer extends Component {
 
 
     render() {
+
         return (
             <CurrentLocation
                 centerAroundCurrentLocation
