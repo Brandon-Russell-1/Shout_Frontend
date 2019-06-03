@@ -33,8 +33,10 @@ const MapWithControlledZoom = compose(
             },
             onZoomChanged: ({ onZoomChange }) => () => {
 
-                onZoomChange(refs.map.getZoom())
-                console.log(refs.map.getZoom())
+                //console.log(refs.map.getZoom())
+                return onZoomChange(refs.map.getZoom())
+
+
             }
         }
     }),
@@ -43,11 +45,11 @@ const MapWithControlledZoom = compose(
 )(props =>
     <GoogleMap
         center={props.myUserLocation}
-        zoom={props.myZoom}
+        zoom={props.zoomLevel}
         ref={props.onMapMounted}
-        onZoomChanged={props.onZoomHandle.bind(this,props.onZoomChanged)}
+        onZoomChanged={props.onZoomChanged}
     >
-
+        {props.onZoomHandle(props.zoom)}
         {props.markers.map(marker => {
             const onClick = props.onMarkerClick.bind(this, marker)
             return (
@@ -139,14 +141,14 @@ class App extends Component {
           </header>
           <Grid container>
               <Grid item xs={6}>
-                  <ShoutList myUserLocation = {userLocation} callbackFromParent={this.myShoutCallback}/>
+                  <ShoutList myUserLocation = {userLocation} callbackFromParent={this.myShoutCallback} myZoom = {this.state.zoomLevel}/>
               </Grid>
 
               <Grid item xs={6}>
 
                   <MapWithControlledZoom myUserLocation = {userLocation} markers = {this.state.mapShouts}
                                          onMarkerClick={this.handleClick} selectedMarker={this.state.selectedMarker}
-                                         myZoom = {this.state.zoomLevel} onZoomHandle = {this.handleZoom}/>
+                                         zoomLevel = {this.state.zoomLevel} onZoomHandle = {this.handleZoom}/>
 
 
               </Grid>

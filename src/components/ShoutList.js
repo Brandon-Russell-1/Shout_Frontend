@@ -25,10 +25,10 @@ class ShoutList extends Component {
 
 
     }
-
+//Fetch based on zoom and center
     fetchShouts = () => {
 
-        fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng)
+        fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng+"&zoom="+this.props.myZoom)
             .then((response) => response.json())
             .then((responseData) => {
 console.log()
