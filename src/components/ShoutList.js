@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css'; //MIT
 import {SERVER_URL} from '../constants.js';
 import Grid from "@material-ui/core/Grid"; //MIT
 
-
+import { throttle, debounce } from 'throttle-debounce'; //MIT
 
 
 class ShoutList extends Component {
@@ -34,22 +34,43 @@ class ShoutList extends Component {
 //Fetch based on zoom and center
     fetchShouts = () => {
 
-        fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng+"&zoom="+this.props.myZoom)
-            .then((response) => response.json())
-            .then((responseData) => {
+        if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0){
+
+            fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng+"&zoom="+this.props.myZoom)
+                .then((response) => response.json())
+                .then((responseData) => {
 
 
-                this.setState({
-                    shouts: responseData['_embedded']['shouts'],
-                });
-                //console.log(this.state.theZoom);
-                this.props.callbackFromParent(responseData['_embedded']['shouts']);
-            })
-            .catch(err => console.error(err));
+                    this.setState({
+                        shouts: responseData['_embedded']['shouts'],
+                    });
+                    //console.log(this.state.theZoom);
+                    this.props.callbackFromParent(responseData['_embedded']['shouts']);
+                })
+                .catch(err => console.error(err));
+        }else{
+
+            fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.theMapCenter[0]+"&userLong="+this.props.theMapCenter[1]+"&zoom="+this.props.myZoom)
+                .then((response) => response.json())
+                .then((responseData) => {
+
+
+                    this.setState({
+                        shouts: responseData['_embedded']['shouts'],
+                    });
+                    //console.log(this.state.theZoom);
+                    this.props.callbackFromParent(responseData['_embedded']['shouts']);
+                })
+                .catch(err => console.error(err));
+
+
+        }
+
 
 
     }
 
+/*
     static getDerivedStateFromProps(nextProps, prevState){
         if(nextProps.myZoom!==prevState.myZoom){
             return { zoomState: nextProps.myZoom};
@@ -58,11 +79,12 @@ class ShoutList extends Component {
         }
         else return null;
     }
+*/
 
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.myZoom!==this.props.myZoom){
             this.fetchShouts();
-        }else if (prevProps.userLocation!==this.props.userLocation){
+        }else if (prevProps.theMapCenter[0]!==this.props.theMapCenter[0] && prevProps.theMapCenter[1]!==this.props.theMapCenter[1]){
             this.fetchShouts();
         }
     }

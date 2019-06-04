@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ShoutList from "./components/ShoutList";
 import Grid from "@material-ui/core/Grid"; //MIT
-
+import { throttle, debounce } from 'throttle-debounce'; //MIT
 
 
 const { compose, withProps, withState, withHandlers } = require("recompose");
@@ -22,7 +22,7 @@ const MapWithControlledZoom = compose(
         mapElement: <div style={{ height: `100%` }} />,
     }),
     withState('zoom', 'onZoomChange', 20),
-    withState('center', 'onCenterChange', 20),
+    withState('center', 'onCenterChange', [0,0]),
     withHandlers(() => {
         let map;
         //const refs = {
@@ -42,7 +42,7 @@ const MapWithControlledZoom = compose(
 
                 //console.log(refs.map.getCenter().lat('a'));
                //console.log(map.getCenter().lat() + " : " + map.getCenter().lng());
-                return  onCenterChange(map.getCenter());
+                return  onCenterChange([map.getCenter().lat(), map.getCenter().lng()]);
             }
         }
     }),
@@ -56,6 +56,7 @@ const MapWithControlledZoom = compose(
         onZoomChanged={props.onZoomChanged}
         onCenterChanged={props.onCenterChanged}
     >
+
         {props.onCenterHandle(props.center)}
         {props.onZoomHandle(props.zoom)}
         {props.markers.map(marker => {
@@ -91,7 +92,7 @@ class App extends Component {
             loading: true,
             selectedMarker: false,
             zoomLevel: 20,
-            myCenter: {lat: 1, lng: 1}
+            myCenter: [0,0]
             };
 
 
@@ -114,11 +115,6 @@ class App extends Component {
     handleCenter = (theCenter, event) => {
 
         this.setState({ myCenter: theCenter });
-
-        //this.setState.userLocation.lat = this.state.myCenter.lat;
-        //this.setState.userLocation.lng = this.state.myCenter.lng;
-
-        console.log(this.state.myCenter);
 
     }
 
@@ -164,7 +160,7 @@ class App extends Component {
           </header>
           <Grid container>
               <Grid item xs={6}>
-                  <ShoutList myUserLocation = {userLocation} callbackFromParent={this.myShoutCallback}
+                  <ShoutList myUserLocation = {userLocation} theMapCenter = {this.state.myCenter} callbackFromParent={this.myShoutCallback}
                              myZoom = {this.state.zoomLevel}/>
               </Grid>
 
