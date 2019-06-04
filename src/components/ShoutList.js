@@ -31,8 +31,6 @@ class ShoutList extends Component {
     }
 
 
-
-
 //Fetch based on zoom and center
     fetchShouts = () => {
 
@@ -44,12 +42,31 @@ class ShoutList extends Component {
                 this.setState({
                     shouts: responseData['_embedded']['shouts'],
                 });
+                //console.log(this.state.theZoom);
                 this.props.callbackFromParent(responseData['_embedded']['shouts']);
             })
             .catch(err => console.error(err));
 
 
     }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        if(nextProps.myZoom!==prevState.myZoom){
+            return { zoomState: nextProps.myZoom};
+        } else if(nextProps.userLocation!==prevState.userLocation){
+            return { centerState: nextProps.userLocation};
+        }
+        else return null;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.myZoom!==this.props.myZoom){
+            this.fetchShouts();
+        }else if (prevProps.userLocation!==this.props.userLocation){
+            this.fetchShouts();
+        }
+    }
+
 
 
 

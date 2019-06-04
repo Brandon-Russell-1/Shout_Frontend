@@ -35,8 +35,11 @@ const MapWithControlledZoom = compose(
 
                 //console.log(refs.map.getZoom())
                 return onZoomChange(refs.map.getZoom())
+            },
+            onCenterChanged: ({ onCenterChange }) => () => {
 
-
+                //console.log(this.onCenterChanged());
+                return onCenterChange(refs.map.getCenter())
             }
         }
     }),
@@ -48,8 +51,10 @@ const MapWithControlledZoom = compose(
         zoom={props.zoomLevel}
         ref={props.onMapMounted}
         onZoomChanged={props.onZoomChanged}
+        onCenterChanged={props.onCenterChanged}
     >
         {props.onZoomHandle(props.zoom)}
+        {props.onCenterHandle(props.center)}
         {props.markers.map(marker => {
             const onClick = props.onMarkerClick.bind(this, marker)
             return (
@@ -81,8 +86,10 @@ class App extends Component {
             mapShouts: [],
             loading: true,
             selectedMarker: false,
-            zoomLevel: 1
+            zoomLevel: 1,
+            myCenter: {lat: 1, lng: 1}
             };
+
 
     }
 
@@ -97,6 +104,12 @@ class App extends Component {
     handleZoom = (theZoom, event) => {
 
         this.setState({ zoomLevel: theZoom });
+
+    }
+
+    handleCenter = (theCenter, event) => {
+//console.log(this.theCenter)
+        this.setState({ myCenter: theCenter });
 
     }
 
@@ -142,14 +155,15 @@ class App extends Component {
           </header>
           <Grid container>
               <Grid item xs={6}>
-                  <ShoutList myUserLocation = {userLocation} callbackFromParent={this.myShoutCallback} myZoom = {this.state.zoomLevel}/>
+                  <ShoutList myUserLocation = {userLocation} callbackFromParent={this.myShoutCallback}
+                             myZoom = {this.state.zoomLevel}/>
               </Grid>
 
               <Grid item xs={6}>
 
                   <MapWithControlledZoom myUserLocation = {userLocation} markers = {this.state.mapShouts}
                                          onMarkerClick={this.handleClick} selectedMarker={this.state.selectedMarker}
-                                         zoomLevel = {this.state.zoomLevel} onZoomHandle = {this.handleZoom}/>
+                                         zoomLevel = {this.state.zoomLevel} onZoomHandle = {this.handleZoom} onCenterHandle = {this.handleCenter}/>
 
 
               </Grid>
