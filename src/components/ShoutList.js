@@ -16,22 +16,30 @@ class ShoutList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { shouts: [], open: false, message: ''};
+        this.state = { shouts: [],
+                       open: false,
+                       message: ''
+
+                       };
+
 
     }
+
 
     componentDidMount() {
         this.fetchShouts();
-
-
     }
+
+
+
+
 //Fetch based on zoom and center
     fetchShouts = () => {
 
         fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng+"&zoom="+this.props.myZoom)
             .then((response) => response.json())
             .then((responseData) => {
-console.log()
+
 
                 this.setState({
                     shouts: responseData['_embedded']['shouts'],

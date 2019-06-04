@@ -21,7 +21,7 @@ const MapWithControlledZoom = compose(
         containerElement: <div style={{ height: `800px` }} />,
         mapElement: <div style={{ height: `100%` }} />,
     }),
-    withState('zoom', 'onZoomChange', 8),
+    withState('zoom', 'onZoomChange', 1),
     withHandlers(() => {
         const refs = {
             map: undefined,
@@ -61,7 +61,7 @@ const MapWithControlledZoom = compose(
                     {props.selectedMarker === marker &&
                     <InfoWindow>
                         <div>
-                            {marker.shoutEntry + ":" + props.zoom}
+                            {marker.shoutEntry}
                         </div>
                     </InfoWindow>}
 
@@ -81,7 +81,7 @@ class App extends Component {
             mapShouts: [],
             loading: true,
             selectedMarker: false,
-            zoomLevel: 15
+            zoomLevel: 1
             };
 
     }
@@ -96,7 +96,8 @@ class App extends Component {
 
     handleZoom = (theZoom, event) => {
 
-        this.setState({ zoomLevel: theZoom })
+        this.setState({ zoomLevel: theZoom });
+
     }
 
     componentDidMount() {
