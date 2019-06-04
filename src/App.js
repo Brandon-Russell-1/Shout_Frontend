@@ -21,25 +21,28 @@ const MapWithControlledZoom = compose(
         containerElement: <div style={{ height: `800px` }} />,
         mapElement: <div style={{ height: `100%` }} />,
     }),
-    withState('zoom', 'onZoomChange', 1),
+    withState('zoom', 'onZoomChange', 20),
+    withState('center', 'onCenterChange', 20),
     withHandlers(() => {
-        const refs = {
-            map: undefined,
-        }
+        let map;
+        //const refs = {
+         //   map: undefined
+        //}
 
         return {
             onMapMounted: () => ref => {
-                refs.map = ref
+                map = ref
             },
             onZoomChanged: ({ onZoomChange }) => () => {
 
                 //console.log(refs.map.getZoom())
-                return onZoomChange(refs.map.getZoom())
+                return onZoomChange(map.getZoom())
             },
-            onCenterChanged: ({ onCenterChange }) => () => {
+            onCenterChanged: ({onCenterChange}) => () => {
 
-                //console.log(this.onCenterChanged());
-                return onCenterChange(refs.map.getCenter())
+                //console.log(refs.map.getCenter().lat('a'));
+               //console.log(map.getCenter().lat() + " : " + map.getCenter().lng());
+                return  onCenterChange(map.getCenter());
             }
         }
     }),
@@ -53,8 +56,8 @@ const MapWithControlledZoom = compose(
         onZoomChanged={props.onZoomChanged}
         onCenterChanged={props.onCenterChanged}
     >
-        {props.onZoomHandle(props.zoom)}
         {props.onCenterHandle(props.center)}
+        {props.onZoomHandle(props.zoom)}
         {props.markers.map(marker => {
             const onClick = props.onMarkerClick.bind(this, marker)
             return (
@@ -82,11 +85,12 @@ const MapWithControlledZoom = compose(
 class App extends Component {
     constructor(props) {
         super(props);
+        this.handleCenter = this.handleCenter.bind(this);
         this.state = { userLocation: { lat: 32, lng: 32 },
             mapShouts: [],
             loading: true,
             selectedMarker: false,
-            zoomLevel: 1,
+            zoomLevel: 20,
             myCenter: {lat: 1, lng: 1}
             };
 
@@ -108,8 +112,13 @@ class App extends Component {
     }
 
     handleCenter = (theCenter, event) => {
-//console.log(this.theCenter)
+
         this.setState({ myCenter: theCenter });
+
+        //this.setState.userLocation.lat = this.state.myCenter.lat;
+        //this.setState.userLocation.lng = this.state.myCenter.lng;
+
+        console.log(this.state.myCenter);
 
     }
 
