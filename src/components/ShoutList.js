@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css'; //MIT
 import {SERVER_URL} from '../constants.js';
 import Grid from "@material-ui/core/Grid"; //MIT
 
-import { throttle, debounce } from 'throttle-debounce'; //MIT
+//import { throttle, debounce } from 'throttle-debounce'; //MIT
 
 
 class ShoutList extends Component {
@@ -166,7 +166,7 @@ class ShoutList extends Component {
                 </Grid>
 
                 <ReactTable data={this.state.shouts} columns={columns}
-                            filterable={true} pageSize={15}/>
+                            filterable={true} pageSize={15}   showPageSizeOptions = {false} defaultPageSize = {10}/>
 
                 <ToastContainer autoClose={1500}/>
             </div>

@@ -1,15 +1,15 @@
 import React from 'react';
 import SkyLight from 'react-skylight'; //MIT
 import TextField from "@material-ui/core/TextField"; //MIT
-import Button from "@material-ui/core/Button"; //MIT
-
+import Button from "@material-ui/core/Button";
+import {IP_URL} from '../constants.js';
 
 
 class AddShout extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { hits: [], shoutEntry: '',  shoutLat: '', shoutLong: ''};
+        this.state = { hits: [], shoutEntry: '',  shoutLat: '', shoutLong: '', shoutIp: ''};
 
     }
 
@@ -24,12 +24,26 @@ class AddShout extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
+//Get IP
+
+        fetch(IP_URL)
+            .then((response) => response.json())
+            .then((responseData) => {
 
 
-        var newShout = { shoutIp: '',shoutEntry: this.state.shoutEntry,
-            shoutLat: this.props.myUserLocation.lat, shoutLong: this.props.myUserLocation.lng};
-        this.props.addShout(newShout);
-        this.refs.addDialog.hide();
+                this.setState({
+                    shoutIp: responseData['ip'],
+                });
+
+                var newShout = { shoutIp: this.state.shoutIp,shoutEntry: this.state.shoutEntry,
+                    shoutLat: this.props.myUserLocation.lat, shoutLong: this.props.myUserLocation.lng};
+                this.props.addShout(newShout);
+                this.refs.addDialog.hide();
+
+            })
+            .catch(err => console.error(err));
+
+
     }
 
     cancelSubmit = (event) => {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ShoutList from "./components/ShoutList";
 import Grid from "@material-ui/core/Grid"; //MIT
-import { throttle, debounce } from 'throttle-debounce'; //MIT
+//import { throttle, debounce } from 'throttle-debounce'; //MIT
 
 
 const { compose, withProps, withState, withHandlers } = require("recompose");
