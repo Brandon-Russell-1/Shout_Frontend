@@ -21,7 +21,7 @@ const MapWithControlledZoom = compose(
         containerElement: <div style={{ height: `800px` }} />,
         mapElement: <div style={{ height: `100%` }} />,
     }),
-    withState('zoom', 'onZoomChange', 20),
+    withState('zoom', 'onZoomChange', 15),
     withState('center', 'onCenterChange', [0,0]),
     withHandlers(() => {
         let map;
@@ -91,7 +91,7 @@ class App extends Component {
             mapShouts: [],
             loading: true,
             selectedMarker: false,
-            zoomLevel: 20,
+            zoomLevel: 15,
             myCenter: [0,0]
             };
 

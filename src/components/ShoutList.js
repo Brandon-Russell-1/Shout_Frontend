@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css'; //MIT
 import {SERVER_URL} from '../constants.js';
 import Grid from "@material-ui/core/Grid"; //MIT
 
-//import { throttle, debounce } from 'throttle-debounce'; //MIT
+import { throttle, debounce } from 'throttle-debounce'; //MIT
 
 
 class ShoutList extends Component {
@@ -18,7 +18,8 @@ class ShoutList extends Component {
         super(props);
         this.state = { shouts: [],
                        open: false,
-                       message: ''
+                       message: '',
+                       zoomCheck: 15
 
                        };
 
@@ -34,41 +35,46 @@ class ShoutList extends Component {
 //Fetch based on zoom and center
     fetchShouts = () => {
 
-        if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0){
+        if (this.props.myZoom <7) {
+            this.setState({zoomCheck: 7})
+        }else if (this.props.myZoom >= 7){
+            this.setState({zoomCheck: this.props.myZoom})
+        }
 
-            fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.myUserLocation.lat+"&userLong="+this.props.myUserLocation.lng+"&zoom="+this.props.myZoom)
-                .then((response) => response.json())
-                .then((responseData) => {
+            if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0) {
 
-
-                    this.setState({
-                        shouts: responseData['_embedded']['shouts'],
-                    });
-                    //console.log(this.state.theZoom);
-                    this.props.callbackFromParent(responseData['_embedded']['shouts']);
-                })
-                .catch(err => console.error(err));
-        }else{
-
-            fetch(SERVER_URL+"/shouts/search/findUserLocationShouts?userLat="+this.props.theMapCenter[0]+"&userLong="+this.props.theMapCenter[1]+"&zoom="+this.props.myZoom)
-                .then((response) => response.json())
-                .then((responseData) => {
+                fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.myUserLocation.lat + "&userLong=" + this.props.myUserLocation.lng + "&zoom=" + this.state.zoomCheck)
+                    .then((response) => response.json())
+                    .then((responseData) => {
 
 
-                    this.setState({
-                        shouts: responseData['_embedded']['shouts'],
-                    });
-                    //console.log(this.state.theZoom);
-                    this.props.callbackFromParent(responseData['_embedded']['shouts']);
-                })
-                .catch(err => console.error(err));
+                        this.setState({
+                            shouts: responseData['_embedded']['shouts'],
+                        });
+                        //console.log(this.state.theZoom);
+                        this.props.callbackFromParent(responseData['_embedded']['shouts']);
+                    })
+                    .catch(err => console.error(err));
+            } else {
+
+                fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.theMapCenter[0] + "&userLong=" + this.props.theMapCenter[1] + "&zoom=" + this.state.zoomCheck)
+                    .then((response) => response.json())
+                    .then((responseData) => {
 
 
+                        this.setState({
+                            shouts: responseData['_embedded']['shouts'],
+                        });
+                        //console.log(this.state.theZoom);
+                        this.props.callbackFromParent(responseData['_embedded']['shouts']);
+                    })
+                    .catch(err => console.error(err));
+
+
+            }
         }
 
 
-
-    }
 
 /*
     static getDerivedStateFromProps(nextProps, prevState){
@@ -83,9 +89,9 @@ class ShoutList extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.myZoom!==this.props.myZoom){
-            this.fetchShouts();
+            throttle(500, this.fetchShouts());
         }else if (prevProps.theMapCenter[0]!==this.props.theMapCenter[0] && prevProps.theMapCenter[1]!==this.props.theMapCenter[1]){
-            this.fetchShouts();
+            debounce(500, this.fetchShouts());
         }
     }
 
