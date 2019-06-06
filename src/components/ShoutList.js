@@ -67,7 +67,9 @@ class ShoutList extends Component {
                         });
                         //console.log(this.state.theZoom);
                         this.props.callbackFromParent(responseData['_embedded']['shouts']);
+                    //    console.log(responseData['_embedded']['shouts'])
                     })
+
                     .catch(err => console.error(err));
 
 
@@ -89,9 +91,9 @@ class ShoutList extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.myZoom!==this.props.myZoom){
-            throttle(500, this.fetchShouts());
+            throttle(300, this.fetchShouts());
         }else if (prevProps.theMapCenter[0]!==this.props.theMapCenter[0] && prevProps.theMapCenter[1]!==this.props.theMapCenter[1]){
-            debounce(500, this.fetchShouts());
+            debounce(300, this.fetchShouts());
         }
     }
 
@@ -137,6 +139,31 @@ class ShoutList extends Component {
         );
     }
 
+
+    // Update shout
+    updateShout(shout, link) {
+        console.log(shout);
+        console.log(link);
+
+        fetch(link,
+            { method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(shout)
+            })
+            .then( res =>
+                toast.success("Changes saved", {
+                    position: toast.POSITION.BOTTOM_LEFT
+                })
+            )
+            .catch( err =>
+                toast.error("Error when saving", {
+                    position: toast.POSITION.BOTTOM_LEFT
+                })
+            )
+    }
+
     handleChange = (e) => {
         this.setState({keyword: e.target.value});
     }
@@ -152,15 +179,16 @@ class ShoutList extends Component {
             accessor: 'shoutEntry',
             Cell: this.renderEditable,
             width: 500
-        }/*, {
-            Header: 'Shout Lat',
-            accessor: 'shoutLat',
-            Cell: this.renderEditable
-        }, {
-            Header: 'Shout Long',
-            accessor: 'shoutLong',
-            Cell: this.renderEditable
-        }*/]
+        },{
+            id: 'savebutton',
+            sortable: 'false',
+            filterable: 'false',
+            width: 100,
+            accessor: '_links.self.href',
+            Cell: ({value,row}) =>
+                (<button onClick={() => {this.updateShout(row,value)}}>
+                    Save</button>)
+        }]
 
         return (
             <div className="App">
