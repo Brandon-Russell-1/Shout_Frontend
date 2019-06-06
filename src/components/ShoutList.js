@@ -146,7 +146,7 @@ class ShoutList extends Component {
         console.log(link);
 
         fetch(link,
-            { method: 'PUT',
+            { method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
