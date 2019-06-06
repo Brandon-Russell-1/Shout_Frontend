@@ -26,7 +26,7 @@
     "react-scripts": "3.0.1",
     "react-skylight": "^0.5.1",
     "react-table": "^6.10.0",
-    "react-toastify": "latest",
+    "react-toastify": "^5.2.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",

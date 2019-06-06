@@ -59,13 +59,33 @@ const MapWithControlledZoom = compose(
 
         {props.onCenterHandle(props.center)}
         {props.onZoomHandle(props.zoom)}
+
+
+        <Marker
+
+
+            position={{ lat: props.myUserLocation.lat, lng: props.myUserLocation.lng }}
+            options={{icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'}}
+        >
+
+            <InfoWindow>
+                <div>
+                    Home
+                </div>
+            </InfoWindow>
+
+        </Marker>
+
+
         {props.markers.map(marker => {
             const onClick = props.onMarkerClick.bind(this, marker)
             return (
+
                 <Marker
                     key={marker.id}
                     onClick={onClick}
                     position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
+
                 >
                     {props.selectedMarker === marker &&
                     <InfoWindow>

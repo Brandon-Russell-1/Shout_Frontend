@@ -9,7 +9,8 @@ import 'react-toastify/dist/ReactToastify.css'; //MIT
 import {SERVER_URL} from '../constants.js';
 import Grid from "@material-ui/core/Grid"; //MIT
 
-import { throttle, debounce } from 'throttle-debounce'; //MIT
+import { throttle, debounce } from 'throttle-debounce';
+import {IP_URL} from "../constants"; //MIT
 
 
 class ShoutList extends Component {
@@ -19,7 +20,10 @@ class ShoutList extends Component {
         this.state = { shouts: [],
                        open: false,
                        message: '',
-                       zoomCheck: 15
+                       zoomCheck: 15,
+                       zoomSet: 7,
+                       ipChecker: '',
+                       originalIP: ''
 
                        };
 
@@ -35,9 +39,9 @@ class ShoutList extends Component {
 //Fetch based on zoom and center
     fetchShouts = () => {
 
-        if (this.props.myZoom <7) {
-            this.setState({zoomCheck: 7})
-        }else if (this.props.myZoom >= 7){
+        if (this.props.myZoom < this.state.zoomSet) {
+            this.setState({zoomCheck: this.state.zoomSet})
+        }else if (this.props.myZoom >= this.state.zoomSet){
             this.setState({zoomCheck: this.props.myZoom})
         }
 
@@ -52,6 +56,7 @@ class ShoutList extends Component {
                             shouts: responseData['_embedded']['shouts'],
                         });
                         //console.log(this.state.theZoom);
+
                         this.props.callbackFromParent(responseData['_embedded']['shouts']);
                     })
                     .catch(err => console.error(err));
@@ -66,6 +71,7 @@ class ShoutList extends Component {
                             shouts: responseData['_embedded']['shouts'],
                         });
                         //console.log(this.state.theZoom);
+                        //console.log(this.state.shouts.length);
                         this.props.callbackFromParent(responseData['_embedded']['shouts']);
                     //    console.log(responseData['_embedded']['shouts'])
                     })
@@ -142,26 +148,53 @@ class ShoutList extends Component {
 
     // Update shout
     updateShout(shout, link) {
-        console.log(shout);
-        console.log(link);
 
-        fetch(link,
-            { method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(shout)
+        //console.log(link);
+
+        this.setState({originalIP: shout['_original']['shoutIp'] })
+        //Get IP
+
+        fetch(IP_URL)
+            .then((response) => response.json())
+            .then((responseData) => {
+
+
+                this.setState({
+                    ipChecker: responseData['ip'],
+                });
             })
-            .then( res =>
-                toast.success("Changes saved", {
-                    position: toast.POSITION.BOTTOM_LEFT
+            .catch(err => console.error(err));
+
+        console.log('original ip: '+this.state.originalIP +'+');
+        console.log('changing ip: '+ this.state.ipChecker+'+');
+
+        if (this.state.ipChecker.replace(/ /g,'') === this.state.originalIP.replace(/ /g,'')){
+            console.log('Good');
+            fetch(link,
+                { method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(shout)
                 })
-            )
-            .catch( err =>
-                toast.error("Error when saving", {
-                    position: toast.POSITION.BOTTOM_LEFT
-                })
-            )
+                .then( res =>
+                    toast.success("Changes saved", {
+                        position: toast.POSITION.BOTTOM_LEFT
+                    })
+                )
+                .catch( err =>
+                    toast.error("Error when saving", {
+                        position: toast.POSITION.BOTTOM_LEFT
+                    })
+                )
+
+        }else{
+            toast.success("Changes must be made from same IP", {
+                position: toast.POSITION.BOTTOM_LEFT
+            })
+        }
+
+
     }
 
     handleChange = (e) => {
