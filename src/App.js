@@ -201,6 +201,7 @@ class App extends Component {
     myShoutCallBackForSelected = (callBackShoutSelected) => {
         this.setState({
             selected: callBackShoutSelected,
+            selectedFromTable: null
         });
         //console.log(this.state.selected)
 
