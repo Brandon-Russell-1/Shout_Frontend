@@ -23,7 +23,9 @@ class ShoutList extends Component {
                        zoomCheck: 15,
                        zoomSet: 7,
                        ipChecker: '',
-                       originalIP: ''
+                       originalIP: '',
+                       selected: null,
+                       selectedIndex: null
 
                        };
 
@@ -55,7 +57,7 @@ class ShoutList extends Component {
                         this.setState({
                             shouts: responseData['_embedded']['shouts'],
                         });
-                        //console.log(this.state.theZoom);
+
 
                         this.props.callbackFromParent(responseData['_embedded']['shouts']);
                     })
@@ -70,10 +72,9 @@ class ShoutList extends Component {
                         this.setState({
                             shouts: responseData['_embedded']['shouts'],
                         });
-                        //console.log(this.state.theZoom);
-                        //console.log(this.state.shouts.length);
+
                         this.props.callbackFromParent(responseData['_embedded']['shouts']);
-                    //    console.log(responseData['_embedded']['shouts'])
+
                     })
 
                     .catch(err => console.error(err));
@@ -96,10 +97,15 @@ class ShoutList extends Component {
 */
 
     componentDidUpdate(prevProps, prevState) {
+
         if(prevProps.myZoom!==this.props.myZoom){
             throttle(300, this.fetchShouts());
+            this.setState({selected: null, selectedIndex: null})
+            this.props.callbackFromParentForSelected(this.state.selected);
         }else if (prevProps.theMapCenter[0]!==this.props.theMapCenter[0] && prevProps.theMapCenter[1]!==this.props.theMapCenter[1]){
             debounce(300, this.fetchShouts());
+            this.setState({selected: null, selectedIndex: null})
+            this.props.callbackFromParentForSelected(this.state.selected);
         }
     }
 
@@ -165,8 +171,8 @@ class ShoutList extends Component {
             })
             .catch(err => console.error(err));
 
-        console.log('original ip: '+this.state.originalIP +'+');
-        console.log('changing ip: '+ this.state.ipChecker+'+');
+       // console.log('original ip: '+this.state.originalIP +'+');
+       // console.log('changing ip: '+ this.state.ipChecker+'+');
 
         if (this.state.ipChecker.replace(/ /g,'') === this.state.originalIP.replace(/ /g,'')){
             console.log('Good');
@@ -233,7 +239,38 @@ class ShoutList extends Component {
                 </Grid>
 
                 <ReactTable data={this.state.shouts} columns={columns}
-                            filterable={true} pageSize={15}   showPageSizeOptions = {false} defaultPageSize = {10}/>
+                            filterable={true} pageSize={15}   showPageSizeOptions = {false} defaultPageSize = {10}
+
+
+                            getTrProps={(state, rowInfo) => {
+                                if (rowInfo && rowInfo.row) {
+                                    return {
+                                        onClick: (e) => {
+                                            this.setState({
+                                                selected: rowInfo.row.savebutton.substr(rowInfo.row.savebutton.lastIndexOf('/')+1),
+                                                selectedIndex: rowInfo.index
+
+                                            })
+                                            this.props.callbackFromParentForSelected(this.state.selected);
+
+                                        },
+                                        style: {
+                                           //color: rowInfo.index === this.state.selectedIndex ? '#99538d' : 'black',
+                                            border: rowInfo.index === this.state.selectedIndex ? '3px solid #687999' : 'black',
+
+                                            background: rowInfo.row.savebutton.substr(rowInfo.row.savebutton.lastIndexOf('/')+1) === this.props.myselectedFromTable ? '#687999' : 'white'
+
+                                        }
+                                    }
+                                }else{
+                                    return {}
+                                }
+                            }
+                            }
+
+
+                />
+
 
                 <ToastContainer autoClose={1500}/>
             </div>

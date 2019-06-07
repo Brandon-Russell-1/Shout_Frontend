@@ -65,7 +65,7 @@ const MapWithControlledZoom = compose(
 
 
             position={{ lat: props.myUserLocation.lat, lng: props.myUserLocation.lng }}
-            options={{icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'}}
+            options={{icon: 'http://maps.google.com/mapfiles/kml/pal2/icon10.png'}}
         >
 
             <InfoWindow>
@@ -79,12 +79,40 @@ const MapWithControlledZoom = compose(
 
         {props.markers.map(marker => {
             const onClick = props.onMarkerClick.bind(this, marker)
+
+
+
+            if(props.shoutSelected !== null && props.shoutSelected === marker['_links']['self']['href'].substr(marker['_links']['self']['href'].lastIndexOf('/')+1)){
+
+
+
+                return (
+
+                    <Marker
+                        key={marker.id}
+                        onClick={onClick}
+                        position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
+                        options={{icon: 'http://maps.google.com/mapfiles/kml/pal2/icon13.png'}}
+
+                    >
+                        {props.selectedMarker === marker &&
+                        <InfoWindow>
+                            <div>
+                                {marker.shoutEntry}
+                            </div>
+                        </InfoWindow>}
+
+                    </Marker>
+                )
+            }else{
+
             return (
 
                 <Marker
                     key={marker.id}
                     onClick={onClick}
                     position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
+                    options={{icon: 'http://maps.google.com/mapfiles/kml/pal4/icon17.png'}}
 
                 >
                     {props.selectedMarker === marker &&
@@ -96,7 +124,7 @@ const MapWithControlledZoom = compose(
 
                 </Marker>
             )
-        })}
+            }})}
 
     </GoogleMap>
 );
@@ -112,7 +140,9 @@ class App extends Component {
             loading: true,
             selectedMarker: false,
             zoomLevel: 15,
-            myCenter: [0,0]
+            myCenter: [0,0],
+            selected: null,
+            selectedFromTable: null
             };
 
 
@@ -124,6 +154,8 @@ class App extends Component {
     handleClick = (marker, event) => {
 
         this.setState({ selectedMarker: marker })
+        this.setState({selectedFromTable: this.state.selectedMarker['_links']['self']['href'].substr(this.state.selectedMarker['_links']['self']['href'].lastIndexOf('/')+1)});
+        //console.log(this.state.selectedMarker)
     }
 
     handleZoom = (theZoom, event) => {
@@ -165,6 +197,15 @@ class App extends Component {
 
     }
 
+
+    myShoutCallBackForSelected = (callBackShoutSelected) => {
+        this.setState({
+            selected: callBackShoutSelected,
+        });
+        //console.log(this.state.selected)
+
+    }
+
   render() {
 
       const { loading, userLocation } = this.state;
@@ -180,15 +221,25 @@ class App extends Component {
           </header>
           <Grid container>
               <Grid item xs={6}>
-                  <ShoutList myUserLocation = {userLocation} theMapCenter = {this.state.myCenter} callbackFromParent={this.myShoutCallback}
-                             myZoom = {this.state.zoomLevel}/>
+                  <ShoutList myUserLocation = {userLocation}
+                             theMapCenter = {this.state.myCenter}
+                             callbackFromParent={this.myShoutCallback}
+                             callbackFromParentForSelected={this.myShoutCallBackForSelected}
+                             myZoom = {this.state.zoomLevel}
+                             myselectedFromTable = {this.state.selectedFromTable}
+                  />
               </Grid>
 
               <Grid item xs={6}>
 
-                  <MapWithControlledZoom myUserLocation = {userLocation} markers = {this.state.mapShouts}
-                                         onMarkerClick={this.handleClick} selectedMarker={this.state.selectedMarker}
-                                         zoomLevel = {this.state.zoomLevel} onZoomHandle = {this.handleZoom} onCenterHandle = {this.handleCenter}/>
+                  <MapWithControlledZoom myUserLocation = {userLocation}
+                                         markers = {this.state.mapShouts}
+                                         onMarkerClick={this.handleClick}
+                                         selectedMarker={this.state.selectedMarker}
+                                         shoutSelected={this.state.selected}
+                                         zoomLevel = {this.state.zoomLevel}
+                                         onZoomHandle = {this.handleZoom}
+                                         onCenterHandle = {this.handleCenter}/>
 
 
               </Grid>
