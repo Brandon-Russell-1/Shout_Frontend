@@ -99,7 +99,7 @@ class ShoutList extends Component {
     componentDidUpdate(prevProps, prevState) {
 
         if(this.props.myselectedFromTable !== prevProps.myselectedFromTable){
-            console.log('test')
+           // console.log('test')
             this.setState({selectedIndex: null})
         }
 
