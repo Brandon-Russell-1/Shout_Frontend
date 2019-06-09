@@ -65,12 +65,12 @@ const MapWithControlledZoom = compose(
 
 
             position={{ lat: props.myUserLocation.lat, lng: props.myUserLocation.lng }}
-            options={{icon: 'http://maps.google.com/mapfiles/kml/pal2/icon10.png'}}
+            options={{icon: 'http://maps.google.com/mapfiles/kml/pal5/icon13.png'}}
         >
 
             <InfoWindow>
                 <div>
-                    Home
+                    You!
                 </div>
             </InfoWindow>
 
@@ -112,7 +112,7 @@ const MapWithControlledZoom = compose(
                     key={marker.id}
                     onClick={onClick}
                     position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
-                    options={{icon: 'http://maps.google.com/mapfiles/kml/pal4/icon17.png'}}
+                    options={{icon: 'http://maps.google.com/mapfiles/kml/pal5/icon14.png'}}
 
                 >
                     {props.selectedMarker === marker &&
@@ -153,7 +153,8 @@ class App extends Component {
 
     handleClick = (marker, event) => {
 
-        this.setState({ selectedMarker: marker })
+        this.setState({ selectedMarker: marker });
+        this.setState({selected: marker['_links']['self']['href'].substr(marker['_links']['self']['href'].lastIndexOf('/')+1)});
         this.setState({selectedFromTable: this.state.selectedMarker['_links']['self']['href'].substr(this.state.selectedMarker['_links']['self']['href'].lastIndexOf('/')+1)});
         //console.log(this.state.selectedMarker)
     }

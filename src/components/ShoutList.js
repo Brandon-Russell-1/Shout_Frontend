@@ -123,14 +123,18 @@ class ShoutList extends Component {
         fetch(SERVER_URL+'/add',
             {   method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                  //  'encType': 'multipart/form-data'
                 },
                 body: JSON.stringify(shout)
+
+              //  body: shout
             })
             .then( res => {
                 toast.success("Shout Added", {
                     position: toast.POSITION.BOTTOM_LEFT
                 });
+             //   console.log(shout)
                 this.fetchShouts();
             })
             .catch(err => console.error(err))
