@@ -11,7 +11,10 @@ import Grid from "@material-ui/core/Grid"; //MIT
 
 import { throttle, debounce } from 'throttle-debounce';
 import {IP_URL} from "../constants";
-import * as ReactDOM from "react-dom"; //MIT
+import * as ReactDOM from "react-dom";
+import SkyLight from "react-skylight";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button"; //MIT
 
 
 class ShoutList extends Component {
@@ -199,7 +202,12 @@ class ShoutList extends Component {
         const columns = [                {
             Header: "Image",
             Cell: (row) => {
-                return <div><img height={100} width={100} src={"data:image/png;base64,"+row.original.shoutSmallImage}/></div>
+                return <div>
+
+                    <img height={100} width={100} src={"data:image/png;base64,"+row.original.shoutSmallImage}/>
+
+
+                </div>
             },
             id: "image"
         },{
@@ -233,7 +241,7 @@ class ShoutList extends Component {
 
                 <div id="container"></div>
                 <ReactTable data={this.state.shouts} columns={columns}
-                            filterable={true} pageSize={15}   showPageSizeOptions = {false} defaultPageSize = {10}
+                            filterable={true} pageSize={5}   showPageSizeOptions = {false} defaultPageSize = {5}
 
 
                             getTrProps={(state, rowInfo) => {

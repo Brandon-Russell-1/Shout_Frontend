@@ -25,12 +25,11 @@ class AddShout extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-if(this.state.selectedFile.size <= 5000000 &&
+if(this.state.selectedFile.size <= 2000000 &&
     (this.state.selectedFile.type === "image/gif" ||
         this.state.selectedFile.type === "image/png" ||
         this.state.selectedFile.type === "image/jpg" ||
-        this.state.selectedFile.type === "image/jpeg" ||
-        this.state.selectedFile.type === "image/bmp" )){
+        this.state.selectedFile.type === "image/jpeg" )){
     //Get IP
 
     fetch(IP_URL)
@@ -54,7 +53,7 @@ if(this.state.selectedFile.size <= 5000000 &&
         .catch(err => console.error(err));
 
 }else{
-    toast.error("Only JPG/PNG/GIF of 5MB or less allowed.", {
+    toast.error("Only JPG/PNG/GIF of 2MB or less allowed.", {
         position: toast.POSITION.BOTTOM_LEFT
     });
 }
@@ -83,7 +82,7 @@ if(this.state.selectedFile.size <= 5000000 &&
                         <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} fullWidth />
                         <br/>
                         <br/>
-                        <input type="file" onChange={this.fileChangedHandler} accept=".png,.jpg,.gif,.jpeg,.bmp"/>
+                        <input type="file" onChange={this.fileChangedHandler} accept=".png,.jpg,.gif,.jpeg"/>
                         <br/>
                         <br/>
                         <Button variant="outlined" style={{marginRight: 10}} color="primary" onClick={this.handleSubmit}>Save</Button>

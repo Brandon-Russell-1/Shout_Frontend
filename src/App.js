@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import ShoutList from "./components/ShoutList";
-import Grid from "@material-ui/core/Grid"; //MIT
+import Grid from "@material-ui/core/Grid";
+import SkyLight from "react-skylight";
+import Button from "@material-ui/core/Button"; //MIT
 //import { throttle, debounce } from 'throttle-debounce'; //MIT
 
 
@@ -95,12 +97,15 @@ const MapWithControlledZoom = compose(
                         options={{icon: 'http://maps.google.com/mapfiles/kml/pal2/icon13.png'}}
 
                     >
-                        {props.selectedMarker === marker &&
+
                         <InfoWindow>
                             <div>
+                                <img  src={"data:image/png;base64,"+marker.shoutImage} />
+                                <br/>
                                 {marker.shoutEntry}
+
                             </div>
-                        </InfoWindow>}
+                        </InfoWindow>
 
                     </Marker>
                 )
@@ -118,6 +123,8 @@ const MapWithControlledZoom = compose(
                     {props.selectedMarker === marker &&
                     <InfoWindow>
                         <div>
+                            <img  src={"data:image/png;base64,"+marker.shoutImage} />
+                            <br/>
                             {marker.shoutEntry}
                         </div>
                     </InfoWindow>}
@@ -154,6 +161,7 @@ class App extends Component {
     handleClick = (marker, event) => {
 
         this.setState({ selectedMarker: marker });
+        //console.log(this.state.mapShouts);
         this.setState({selected: marker['_links']['self']['href'].substr(marker['_links']['self']['href'].lastIndexOf('/')+1)});
         this.setState({selectedFromTable: this.state.selectedMarker['_links']['self']['href'].substr(this.state.selectedMarker['_links']['self']['href'].lastIndexOf('/')+1)});
         //console.log(this.state.selectedMarker)
@@ -202,7 +210,8 @@ class App extends Component {
     myShoutCallBackForSelected = (callBackShoutSelected) => {
         this.setState({
             selected: callBackShoutSelected,
-            selectedFromTable: null
+            selectedFromTable: null,
+            selectedMarker: null
         });
         //console.log(this.state.selected)
 
@@ -221,30 +230,37 @@ class App extends Component {
           <header className="App-header">
             <h1 className="App-title">Day Shout</h1>
           </header>
-          <Grid container>
-              <Grid item xs={6}>
-                  <ShoutList myUserLocation = {userLocation}
-                             theMapCenter = {this.state.myCenter}
-                             callbackFromParent={this.myShoutCallback}
-                             callbackFromParentForSelected={this.myShoutCallBackForSelected}
-                             myZoom = {this.state.zoomLevel}
-                             myselectedFromTable = {this.state.selectedFromTable}
-                  />
-              </Grid>
-
-              <Grid item xs={6}>
-
-                  <MapWithControlledZoom myUserLocation = {userLocation}
-                                         markers = {this.state.mapShouts}
-                                         onMarkerClick={this.handleClick}
-                                         selectedMarker={this.state.selectedMarker}
-                                         shoutSelected={this.state.selected}
-                                         zoomLevel = {this.state.zoomLevel}
-                                         onZoomHandle = {this.handleZoom}
-                                         onCenterHandle = {this.handleCenter}/>
+            <Grid
+                container
 
 
-              </Grid>
+            >
+
+                <Grid item xs={12} sm={6}  >
+                    <ShoutList myUserLocation = {userLocation}
+                               theMapCenter = {this.state.myCenter}
+                               callbackFromParent={this.myShoutCallback}
+                               callbackFromParentForSelected={this.myShoutCallBackForSelected}
+                               myZoom = {this.state.zoomLevel}
+                               myselectedFromTable = {this.state.selectedFromTable}
+                    />
+                </Grid>
+
+                <Grid item xs={12} sm={6} >
+
+                    <MapWithControlledZoom myUserLocation = {userLocation}
+                                           markers = {this.state.mapShouts}
+                                           onMarkerClick={this.handleClick}
+                                           selectedMarker={this.state.selectedMarker}
+                                           shoutSelected={this.state.selected}
+                                           zoomLevel = {this.state.zoomLevel}
+                                           onZoomHandle = {this.handleZoom}
+                                           onCenterHandle = {this.handleCenter}/>
+
+
+                </Grid>
+
+
 
           </Grid>
 
