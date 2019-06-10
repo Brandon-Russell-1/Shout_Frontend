@@ -39,7 +39,17 @@ class ShoutList extends Component {
 
     componentDidMount() {
         this.fetchShouts();
+
+        var intervalId = setInterval(this.fetchShouts, 1000);
+        // store intervalId in the state so it can be accessed later:
+        this.setState({intervalId: intervalId});
     }
+
+    componentWillUnmount() {
+    // use intervalId from the state to clear the interval
+    clearInterval(this.state.intervalId);
+}
+
 
 
 //Fetch based on zoom and center
