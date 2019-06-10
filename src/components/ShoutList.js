@@ -10,7 +10,8 @@ import {SERVER_URL} from '../constants.js';
 import Grid from "@material-ui/core/Grid"; //MIT
 
 import { throttle, debounce } from 'throttle-debounce';
-import {IP_URL} from "../constants"; //MIT
+import {IP_URL} from "../constants";
+import * as ReactDOM from "react-dom"; //MIT
 
 
 class ShoutList extends Component {
@@ -60,6 +61,7 @@ class ShoutList extends Component {
 
 
                         this.props.callbackFromParent(responseData['_embedded']['shouts']);
+                       // console.log(this.state.shouts);
                     })
                     .catch(err => console.error(err));
             } else {
@@ -85,17 +87,6 @@ class ShoutList extends Component {
 
 
 
-/*
-    static getDerivedStateFromProps(nextProps, prevState){
-        if(nextProps.myZoom!==prevState.myZoom){
-            return { zoomState: nextProps.myZoom};
-        } else if(nextProps.userLocation!==prevState.userLocation){
-            return { centerState: nextProps.userLocation};
-        }
-        else return null;
-    }
-*/
-
     componentDidUpdate(prevProps, prevState) {
 
         if(this.props.myselectedFromTable !== prevProps.myselectedFromTable){
@@ -120,26 +111,14 @@ class ShoutList extends Component {
     // Add new shout
     addShout(shout) {
 
-        fetch(SERVER_URL+'/add',
-            {   method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                  //  'encType': 'multipart/form-data'
-                },
-                body: JSON.stringify(shout)
-
-              //  body: shout
-            })
+        fetch(SERVER_URL+'/add', { method: 'POST', headers: {}, body: shout})
             .then( res => {
                 toast.success("Shout Added", {
                     position: toast.POSITION.BOTTOM_LEFT
                 });
-             //   console.log(shout)
                 this.fetchShouts();
             })
             .catch(err => console.error(err))
-        //window.location.reload();
-
     }
 
     renderEditable = (cellInfo) => {
@@ -164,7 +143,6 @@ class ShoutList extends Component {
     // Update shout
     updateShout(shout, link) {
 
-        //console.log(link);
 
         this.setState({originalIP: shout['_original']['shoutIp'] })
         //Get IP
@@ -184,7 +162,7 @@ class ShoutList extends Component {
        // console.log('changing ip: '+ this.state.ipChecker+'+');
 
         if (this.state.ipChecker.replace(/ /g,'') === this.state.originalIP.replace(/ /g,'')){
-            console.log('Good');
+         //   console.log('Good');
             fetch(link,
                 { method: 'PATCH',
                     headers: {
@@ -204,7 +182,7 @@ class ShoutList extends Component {
                 )
 
         }else{
-            toast.success("Changes must be made from same IP", {
+            toast.error("Changes must be made from same IP", {
                 position: toast.POSITION.BOTTOM_LEFT
             })
         }
@@ -218,7 +196,13 @@ class ShoutList extends Component {
 
     render() {
 
-        const columns = [{
+        const columns = [                {
+            Header: "Image",
+            Cell: (row) => {
+                return <div><img height={100} width={100} src={"data:image/png;base64,"+row.original.shoutImage}/></div>
+            },
+            id: "image"
+        },{
             Header: 'Date Entered',
             accessor: 'shoutDate',
             Cell: this.renderEditable
@@ -247,6 +231,7 @@ class ShoutList extends Component {
                     </Grid>
                 </Grid>
 
+                <div id="container"></div>
                 <ReactTable data={this.state.shouts} columns={columns}
                             filterable={true} pageSize={15}   showPageSizeOptions = {false} defaultPageSize = {10}
 

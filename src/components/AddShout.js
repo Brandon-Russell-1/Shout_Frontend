@@ -3,7 +3,8 @@ import SkyLight from 'react-skylight'; //MIT
 import TextField from "@material-ui/core/TextField"; //MIT
 import Button from "@material-ui/core/Button";
 import {IP_URL} from '../constants.js';
-
+import { ToastContainer, toast } from 'react-toastify'; //MIT
+import 'react-toastify/dist/ReactToastify.css'; //MIT
 
 class AddShout extends React.Component {
 
@@ -24,32 +25,39 @@ class AddShout extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-//Get IP
+if(this.state.selectedFile.size <= 5000000 &&
+    (this.state.selectedFile.type === "image/gif" ||
+        this.state.selectedFile.type === "image/png" ||
+        this.state.selectedFile.type === "image/jpg" ||
+        this.state.selectedFile.type === "image/jpeg" ||
+        this.state.selectedFile.type === "image/bmp" )){
+    //Get IP
 
-        fetch(IP_URL)
-            .then((response) => response.json())
-            .then((responseData) => {
+    fetch(IP_URL)
+        .then((response) => response.json())
+        .then((responseData) => {
 
+            this.setState({
+                shoutIp: responseData['ip'],
+            });
 
-                this.setState({
-                    shoutIp: responseData['ip'],
-                });
+            let newShout = new FormData();
+            newShout.append('shoutImage', this.state.selectedFile);
+            newShout.append('shoutIp', this.state.shoutIp);
+            newShout.append('shoutEntry', this.state.shoutEntry);
+            newShout.append('shoutLat', this.props.myUserLocation.lat);
+            newShout.append('shoutLong', this.props.myUserLocation.lng)
+            this.props.addShout(newShout);
+            this.refs.addDialog.hide();
 
-/*                var newShout = { shoutImage: this.state.selectedFile, shoutIp: this.state.shoutIp,shoutEntry: this.state.shoutEntry,
-                    shoutLat: this.props.myUserLocation.lat, shoutLong: this.props.myUserLocation.lng};*/
+        })
+        .catch(err => console.error(err));
 
-                var newShout = {  shoutIp: this.state.shoutIp,shoutEntry: this.state.shoutEntry,
-                    shoutLat: this.props.myUserLocation.lat, shoutLong: this.props.myUserLocation.lng};
-//var newShout = {shoutImage: this.state.selectedFile};
-                //this.props.addShout(newShout);
-                this.props.addShout(newShout);
-
-             //   console.log(newShout)
-                this.refs.addDialog.hide();
-
-            })
-            .catch(err => console.error(err));
-
+}else{
+    toast.error("Only JPG/PNG/GIF of 5MB or less allowed.", {
+        position: toast.POSITION.BOTTOM_LEFT
+    });
+}
 
     }
 
@@ -75,7 +83,7 @@ class AddShout extends React.Component {
                         <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} fullWidth />
                         <br/>
                         <br/>
-                        <input type="file" onChange={this.fileChangedHandler}/>
+                        <input type="file" onChange={this.fileChangedHandler} accept=".png,.jpg,.gif,.jpeg,.bmp"/>
                         <br/>
                         <br/>
                         <Button variant="outlined" style={{marginRight: 10}} color="primary" onClick={this.handleSubmit}>Save</Button>
