@@ -199,7 +199,7 @@ class ShoutList extends Component {
         const columns = [                {
             Header: "Image",
             Cell: (row) => {
-                return <div><img height={100} width={100} src={"data:image/png;base64,"+row.original.shoutImage}/></div>
+                return <div><img height={100} width={100} src={"data:image/png;base64,"+row.original.shoutSmallImage}/></div>
             },
             id: "image"
         },{

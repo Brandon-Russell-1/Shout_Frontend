@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="988d47bf-f915-4d8f-9625-780fb2840ac7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddShout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddShout.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ShoutList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ShoutList.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -20,7 +19,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-621">
+            <state relative-caret-position="-672">
               <caret line="174" column="49" selection-start-line="174" selection-start-column="49" selection-end-line="174" selection-end-column="49" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
@@ -29,11 +28,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/ShoutList.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="63" column="37" selection-start-line="63" selection-start-column="26" selection-end-line="63" selection-end-column="37" />
+            <state relative-caret-position="501">
+              <caret line="193" column="49" lean-forward="true" selection-start-line="193" selection-start-column="49" selection-end-line="193" selection-end-column="49" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
                 <element signature="e#194#231#0" expanded="true" />
@@ -56,7 +55,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/constants.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="34">
@@ -96,6 +95,7 @@
       <find>selectedFromTable</find>
       <find>console.lo</find>
       <find>console.log</find>
+      <find>shoutImage</find>
     </findStrings>
     <replaceStrings>
       <replace>shouts</replace>
@@ -123,8 +123,8 @@
         <option value="$PROJECT_DIR$/src/components/SimpleMap.js" />
         <option value="$PROJECT_DIR$/src/App.js" />
         <option value="$PROJECT_DIR$/src/components/AddShout.js" />
-        <option value="$PROJECT_DIR$/src/constants.js" />
         <option value="$PROJECT_DIR$/src/components/ShoutList.js" />
+        <option value="$PROJECT_DIR$/src/constants.js" />
       </list>
     </option>
   </component>
@@ -151,7 +151,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -168,6 +167,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -234,12 +234,13 @@
       <workItem from="1559840425414" duration="4517000" />
       <workItem from="1559858814412" duration="8948000" />
       <workItem from="1559895652811" duration="1924000" />
-      <workItem from="1559944397765" duration="21037000" />
+      <workItem from="1559944397765" duration="21637000" />
+      <workItem from="1560166966737" duration="1838000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="222544000" />
+    <option name="totallyTimeSpent" value="224982000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -411,23 +412,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-621">
-          <caret line="174" column="49" selection-start-line="174" selection-start-column="49" selection-end-line="174" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/constants.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/AddShout.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="281">
@@ -439,15 +423,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-672">
+          <caret line="174" column="49" selection-start-line="174" selection-start-column="49" selection-end-line="174" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/ShoutList.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="63" column="37" selection-start-line="63" selection-start-column="26" selection-end-line="63" selection-end-column="37" />
+        <state relative-caret-position="501">
+          <caret line="193" column="49" lean-forward="true" selection-start-line="193" selection-start-column="49" selection-end-line="193" selection-end-column="49" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
             <element signature="e#194#231#0" expanded="true" />
             <element signature="e#348#391#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/constants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
