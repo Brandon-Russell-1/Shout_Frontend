@@ -108,11 +108,11 @@ class ShoutList extends Component {
         }
 
         if(prevProps.myZoom!==this.props.myZoom){
-            throttle(300, this.fetchShouts());
+            debounce(400, this.fetchShouts());
           //  this.setState({selected: null, selectedIndex: null})
          //   this.props.callbackFromParentForSelected(this.state.selected);
         }else if (prevProps.theMapCenter[0]!==this.props.theMapCenter[0] && prevProps.theMapCenter[1]!==this.props.theMapCenter[1]){
-            debounce(300, this.fetchShouts());
+            debounce(400, this.fetchShouts());
           //  this.setState({selected: null, selectedIndex: null})
           //  this.props.callbackFromParentForSelected(this.state.selected);
         }

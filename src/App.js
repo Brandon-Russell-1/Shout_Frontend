@@ -69,13 +69,13 @@ const MapWithControlledZoom = compose(
             position={{ lat: props.myUserLocation.lat, lng: props.myUserLocation.lng }}
             options={{icon: 'http://maps.google.com/mapfiles/kml/pal5/icon13.png'}}
         >
-
-            <InfoWindow>
+            {props.onOpenHandle &&
+            <InfoWindow onCloseClick={props.handleToggle}>
                 <div>
                     You!
                 </div>
             </InfoWindow>
-
+            }
         </Marker>
 
 
@@ -97,15 +97,15 @@ const MapWithControlledZoom = compose(
                         options={{icon: 'http://maps.google.com/mapfiles/kml/pal2/icon13.png'}}
 
                     >
-
-                        <InfoWindow>
+                        {props.onOpenHandle &&
+                        <InfoWindow onCloseClick={props.handleToggle}>
                             <div>
                                 <img  src={"data:image/png;base64,"+marker.shoutImage} />
                                 <br/>
                                 {marker.shoutEntry}
 
                             </div>
-                        </InfoWindow>
+                        </InfoWindow>}
 
                     </Marker>
                 )
@@ -120,8 +120,8 @@ const MapWithControlledZoom = compose(
                     options={{icon: 'http://maps.google.com/mapfiles/kml/pal5/icon14.png'}}
 
                 >
-                    {props.selectedMarker === marker &&
-                    <InfoWindow>
+                    {props.onOpenHandle && props.selectedMarker === marker &&
+                    <InfoWindow onCloseClick={props.handleToggle}>
                         <div>
                             <img  src={"data:image/png;base64,"+marker.shoutImage} />
                             <br/>
@@ -149,16 +149,24 @@ class App extends Component {
             zoomLevel: 15,
             myCenter: [0,0],
             selected: null,
-            selectedFromTable: null
+            selectedFromTable: null,
+            isOpen: false
             };
 
 
     }
 
 
-
+    handleToggle = () => {
+        this.setState({
+            isOpen: !false
+        });
+    }
 
     handleClick = (marker, event) => {
+        this.setState({
+            isOpen: !false
+        });
 
         this.setState({ selectedMarker: marker });
         //console.log(this.state.mapShouts);
@@ -255,7 +263,10 @@ class App extends Component {
                                            shoutSelected={this.state.selected}
                                            zoomLevel = {this.state.zoomLevel}
                                            onZoomHandle = {this.handleZoom}
-                                           onCenterHandle = {this.handleCenter}/>
+                                           onCenterHandle = {this.handleCenter}
+                                           onOpenHandle = {this.state.isOpen}/>
+                                           handleToggle = {this.handleToggle}
+
 
 
                 </Grid>
