@@ -48,11 +48,20 @@ class ShoutList extends Component {
     componentWillUnmount() {
     // use intervalId from the state to clear the interval
     clearInterval(this.state.intervalId);
-}
+
+    }
+
+    //Call back to reset map center to user location
+    resetMapCenterCallBackAddShout = (mapResetUserLocation) => {
+
+        this.props.myResetMapLocationCallBack(mapResetUserLocation);
+
+    }
 
 
 
-//Fetch based on zoom and center
+
+    //Fetch based on zoom and center
     fetchShouts = () => {
 
         if (this.props.myZoom < this.state.zoomSet) {
@@ -74,7 +83,6 @@ class ShoutList extends Component {
 
 
                         this.props.callbackFromParent(responseData['_embedded']['shouts']);
-                       // console.log(this.state.shouts);
                     })
                     .catch(err => console.error(err));
             } else {
@@ -103,22 +111,15 @@ class ShoutList extends Component {
     componentDidUpdate(prevProps, prevState) {
 
         if(this.props.myselectedFromTable !== prevProps.myselectedFromTable){
-           // console.log('test')
             this.setState({selectedIndex: null})
         }
 
         if(prevProps.myZoom!==this.props.myZoom){
             debounce(400, this.fetchShouts());
-          //  this.setState({selected: null, selectedIndex: null})
-         //   this.props.callbackFromParentForSelected(this.state.selected);
         }else if (prevProps.theMapCenter[0]!==this.props.theMapCenter[0] && prevProps.theMapCenter[1]!==this.props.theMapCenter[1]){
             debounce(400, this.fetchShouts());
-          //  this.setState({selected: null, selectedIndex: null})
-          //  this.props.callbackFromParentForSelected(this.state.selected);
         }
     }
-
-
 
 
     // Add new shout
@@ -171,11 +172,7 @@ class ShoutList extends Component {
             })
             .catch(err => console.error(err));
 
-       // console.log('original ip: '+this.state.originalIP +'+');
-       // console.log('changing ip: '+ this.state.ipChecker+'+');
-
         if (this.state.ipChecker.replace(/ /g,'') === this.state.originalIP.replace(/ /g,'')){
-         //   console.log('Good');
             fetch(link,
                 { method: 'PATCH',
                     headers: {
@@ -247,7 +244,7 @@ class ShoutList extends Component {
 
                 <Grid container>
                     <Grid item>
-                        <AddShout addShout={this.addShout} fetchShouts={this.fetchShouts} myUserLocation = {this.props.myUserLocation}/>
+                        <AddShout addShout={this.addShout} fetchShouts={this.fetchShouts} myUserLocation = {this.props.myUserLocation} myResetUserMapLocationCallBack = {this.resetMapCenterCallBackAddShout}/>
                     </Grid>
                 </Grid>
 

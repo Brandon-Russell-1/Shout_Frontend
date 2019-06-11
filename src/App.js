@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import ShoutList from "./components/ShoutList";
 import Grid from "@material-ui/core/Grid";
-import SkyLight from "react-skylight";
-import Button from "@material-ui/core/Button"; //MIT
-//import { throttle, debounce } from 'throttle-debounce'; //MIT
-
 
 const { compose, withProps, withState, withHandlers } = require("recompose");
 const {
@@ -27,23 +23,15 @@ const MapWithControlledZoom = compose(
     withState('center', 'onCenterChange', [0,0]),
     withHandlers(() => {
         let map;
-        //const refs = {
-         //   map: undefined
-        //}
 
         return {
             onMapMounted: () => ref => {
                 map = ref
             },
             onZoomChanged: ({ onZoomChange }) => () => {
-
-                //console.log(refs.map.getZoom())
                 return onZoomChange(map.getZoom())
             },
             onCenterChanged: ({onCenterChange}) => () => {
-
-                //console.log(refs.map.getCenter().lat('a'));
-               //console.log(map.getCenter().lat() + " : " + map.getCenter().lng());
                 return  onCenterChange([map.getCenter().lat(), map.getCenter().lng()]);
             }
         }
@@ -64,10 +52,8 @@ const MapWithControlledZoom = compose(
 
 
         <Marker
-
-
             position={{ lat: props.myUserLocation.lat, lng: props.myUserLocation.lng }}
-            options={{icon: '%PUBLIC_URL%/HomeFlag.png'}}
+            options={{icon: process.env.PUBLIC_URL + '/HomeFlag.png'}}
         >
 
             <InfoWindow >
@@ -78,15 +64,11 @@ const MapWithControlledZoom = compose(
 
         </Marker>
 
-
         {props.markers.map(marker => {
             const onClick = props.onMarkerClick.bind(this, marker)
             const infoClick = props.handleMarkerToggle.bind(this)
 
-
-
             if(props.shoutSelected !== null && props.shoutSelected === marker['_links']['self']['href'].substr(marker['_links']['self']['href'].lastIndexOf('/')+1)){
-
 
                 return (
 
@@ -94,7 +76,7 @@ const MapWithControlledZoom = compose(
                         key={marker.id}
                         onClick={onClick}
                         position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
-                        options={{icon: 'http://maps.google.com/mapfiles/kml/pal2/icon13.png'}}
+                        options={{icon: process.env.PUBLIC_URL + '/SelectedFlag.png'}}
 
                     >
                         {props.onOpenHandle &&
@@ -117,7 +99,7 @@ const MapWithControlledZoom = compose(
                     key={marker.id}
                     onClick={onClick}
                     position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
-                    options={{icon: 'http://maps.google.com/mapfiles/kml/pal5/icon14.png'}}
+                    options={{icon: process.env.PUBLIC_URL + '/Pin.png'}}
 
                 >
                     {props.onOpenHandle && props.selectedMarker === marker &&
@@ -135,7 +117,6 @@ const MapWithControlledZoom = compose(
 
     </GoogleMap>
 );
-
 
 
 class App extends Component {
@@ -168,24 +149,17 @@ class App extends Component {
         this.setState(prevState =>({
             isOpen: !prevState.isOpen
         }));
-
         this.setState({ selectedMarker: marker });
-        //console.log(this.state.mapShouts);
         this.setState({selected: marker['_links']['self']['href'].substr(marker['_links']['self']['href'].lastIndexOf('/')+1)});
         this.setState({selectedFromTable: this.state.selectedMarker['_links']['self']['href'].substr(this.state.selectedMarker['_links']['self']['href'].lastIndexOf('/')+1)});
-        //console.log(this.state.selectedMarker)
     }
 
     handleZoom = (theZoom, event) => {
-
         this.setState({ zoomLevel: theZoom });
-
     }
 
     handleCenter = (theCenter, event) => {
-
         this.setState({ myCenter: theCenter });
-
     }
 
     componentDidMount() {
@@ -208,14 +182,14 @@ class App extends Component {
     }
 
 
+    //Get list of shouts from Shout List
     myShoutCallback = (callbackshouts) => {
         this.setState({
             mapShouts: callbackshouts,
         });
-
     }
 
-
+    //Call back to get if a row is double clicked
     myShoutCallBackForSelected = (callBackShoutSelected) => {
         this.setState({
             selected: callBackShoutSelected, //What was selected from table - index id only
@@ -223,7 +197,13 @@ class App extends Component {
             selectedMarker: null, //What was selected on map - complete object
             isOpen: true //Toggle for picture pop up
         });
-        //console.log(this.state.selected)
+    }
+
+    //Call back to reset map center to user location
+    resetMapCenterCallBack = (mapResetUserLocation) => {
+
+        this.setState({userlocation : mapResetUserLocation});
+        console.log("From App: " + this.state.userLocation.lat + " : " + this.state.userLocation.lng);
 
     }
 
@@ -253,6 +233,7 @@ class App extends Component {
                                callbackFromParentForSelected={this.myShoutCallBackForSelected}
                                myZoom = {this.state.zoomLevel}
                                myselectedFromTable = {this.state.selectedFromTable}
+                               myResetMapLocationCallBack = {this.resetMapCenterCallBack}
                     />
                 </Grid>
 
@@ -272,8 +253,6 @@ class App extends Component {
 
 
                 </Grid>
-
-
 
           </Grid>
 

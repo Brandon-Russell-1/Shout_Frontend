@@ -15,7 +15,6 @@ class AddShout extends React.Component {
     constructor(props) {
         super(props);
         this.state = { hits: [], shoutEntry: '',  shoutLat: '', shoutLong: '', shoutIp: '', selectedFile: null, shoutImage: null, progressBarStatus: 0};
-
     }
 
 
@@ -29,15 +28,12 @@ class AddShout extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-
         //Compress PNG and JPEG files
         if ( this.state.selectedFile.type === "image/png" ||
             this.state.selectedFile.type === "image/jpg" ||
             this.state.selectedFile.type === "image/jpeg"){
 
             var imageFile = this.state.selectedFile;
-           // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
-          //  console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
 
             var options = {
                 maxSizeMB: 1,
@@ -47,8 +43,6 @@ class AddShout extends React.Component {
             this.setState({progressBarStatus: 10})
             imageCompression(imageFile, options)
                 .then((compressedFile) => {
-                //    console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-                //    console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
 
                     this.setState({selectedFile: compressedFile});
 
@@ -120,6 +114,23 @@ class AddShout extends React.Component {
 
     }
 
+    findHome = () => {
+
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const { latitude, longitude } = position.coords;
+
+                this.setState({
+                    ResetUserLocation: { lat: latitude, lng: longitude },
+
+                });
+            },
+            () => {}
+        );
+        console.log(this.state.ResetUserLocation);
+        this.props.myResetUserMapLocationCallBack(this.state.ResetUserLocation);
+    }
+
     render() {
         return (
             <div>
@@ -143,6 +154,8 @@ class AddShout extends React.Component {
                 </SkyLight>
                 <div>
                     <Button variant="contained" color="primary" style={{'margin': '10px'}} onClick={() => this.refs.addDialog.show()}>New Shout</Button>
+                    <Button variant="contained" color="primary" style={{'margin': '10px'}} onClick={this.findHome}>Find Home</Button>
+
                 </div>
             </div>
         );
