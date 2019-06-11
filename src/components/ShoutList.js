@@ -40,7 +40,7 @@ class ShoutList extends Component {
     componentDidMount() {
         this.fetchShouts();
 
-        var intervalId = setInterval(this.fetchShouts, 1000);
+        var intervalId = setInterval(this.fetchShouts, 10000);
         // store intervalId in the state so it can be accessed later:
         this.setState({intervalId: intervalId});
     }
