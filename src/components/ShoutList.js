@@ -228,7 +228,7 @@ class ShoutList extends Component {
             Header: 'Shout Entry',
             accessor: 'shoutEntry',
             Cell: this.renderEditable,
-            width: 500
+            width: 400
         },{
             id: 'savebutton',
             sortable: 'false',
