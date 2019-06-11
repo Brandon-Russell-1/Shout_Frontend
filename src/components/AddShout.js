@@ -36,8 +36,8 @@ class AddShout extends React.Component {
             var imageFile = this.state.selectedFile;
 
             var options = {
-                maxSizeMB: 1,
-                maxWidthOrHeight: 1280,
+                maxSizeMB: 0.5,
+                maxWidthOrHeight: 720,
                 useWebWorker: true
             }
             this.setState({progressBarStatus: 10})
@@ -127,8 +127,9 @@ class AddShout extends React.Component {
             },
             () => {}
         );
-        console.log(this.state.ResetUserLocation);
-        this.props.myResetUserMapLocationCallBack(this.state.ResetUserLocation);
+        if (this.state.ResetUserLocation != null){
+            this.props.myResetUserMapLocationCallBack(this.state.ResetUserLocation);
+        }
     }
 
     render() {

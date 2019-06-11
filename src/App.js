@@ -19,7 +19,7 @@ const MapWithControlledZoom = compose(
         containerElement: <div style={{ height: `800px` }} />,
         mapElement: <div style={{ height: `100%` }} />,
     }),
-    withState('zoom', 'onZoomChange', 15),
+    withState('zoom', 'onZoomChange', 16),
     withState('center', 'onCenterChange', [0,0]),
     withHandlers(() => {
         let map;
@@ -127,7 +127,7 @@ class App extends Component {
             mapShouts: [],
             loading: true,
             selectedMarker: false,
-            zoomLevel: 15,
+            zoomLevel: 16,
             myCenter: [0,0],
             selected: null,
             selectedFromTable: null,
@@ -199,11 +199,17 @@ class App extends Component {
         });
     }
 
-    //Call back to reset map center to user location
+    //Call back to reset map center to user location & reset zoom
     resetMapCenterCallBack = (mapResetUserLocation) => {
 
-        this.setState({userlocation : mapResetUserLocation});
-        console.log("From App: " + this.state.userLocation.lat + " : " + this.state.userLocation.lng);
+       this.setState({userLocation: { lat: mapResetUserLocation['lat'], lng: mapResetUserLocation['lng'] }});
+        this.setState({ zoomLevel: 16 });
+        this.setState({
+            selected: null, //What was selected from table - index id only
+            selectedFromTable: null, //What was selected from map - index id only
+            selectedMarker: null, //What was selected on map - complete object
+            isOpen: true //Toggle for picture pop up
+        });
 
     }
 

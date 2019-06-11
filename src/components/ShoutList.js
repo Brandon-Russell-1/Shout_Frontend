@@ -25,7 +25,7 @@ class ShoutList extends Component {
                        open: false,
                        message: '',
                        zoomCheck: 15,
-                       zoomSet: 7,
+                       zoomSet: 10,
                        ipChecker: '',
                        originalIP: '',
                        selected: null,
@@ -64,11 +64,12 @@ class ShoutList extends Component {
     //Fetch based on zoom and center
     fetchShouts = () => {
 
-        if (this.props.myZoom < this.state.zoomSet) {
-            this.setState({zoomCheck: this.state.zoomSet})
-        }else if (this.props.myZoom >= this.state.zoomSet){
+        if (this.props.myZoom >= this.state.zoomSet){
             this.setState({zoomCheck: this.props.myZoom})
+        }else if (this.props.myZoom < this.state.zoomSet) {
+            this.setState({zoomCheck: this.state.zoomSet})
         }
+
 
             if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0) {
 
@@ -104,6 +105,8 @@ class ShoutList extends Component {
 
 
             }
+
+
         }
 
 
