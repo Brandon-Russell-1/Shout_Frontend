@@ -67,25 +67,25 @@ const MapWithControlledZoom = compose(
 
 
             position={{ lat: props.myUserLocation.lat, lng: props.myUserLocation.lng }}
-            options={{icon: 'http://maps.google.com/mapfiles/kml/pal5/icon13.png'}}
+            options={{icon: '%PUBLIC_URL%/HomeFlag.png'}}
         >
-            {props.onOpenHandle &&
-            <InfoWindow onCloseClick={props.handleToggle}>
+
+            <InfoWindow >
                 <div>
                     You!
                 </div>
             </InfoWindow>
-            }
+
         </Marker>
 
 
         {props.markers.map(marker => {
             const onClick = props.onMarkerClick.bind(this, marker)
+            const infoClick = props.handleMarkerToggle.bind(this)
 
 
 
             if(props.shoutSelected !== null && props.shoutSelected === marker['_links']['self']['href'].substr(marker['_links']['self']['href'].lastIndexOf('/')+1)){
-
 
 
                 return (
@@ -98,7 +98,7 @@ const MapWithControlledZoom = compose(
 
                     >
                         {props.onOpenHandle &&
-                        <InfoWindow onCloseClick={props.handleToggle}>
+                        <InfoWindow onCloseClick={infoClick}>
                             <div>
                                 <img  src={"data:image/png;base64,"+marker.shoutImage} />
                                 <br/>
@@ -121,7 +121,7 @@ const MapWithControlledZoom = compose(
 
                 >
                     {props.onOpenHandle && props.selectedMarker === marker &&
-                    <InfoWindow onCloseClick={props.handleToggle}>
+                    <InfoWindow onCloseClick={infoClick}>
                         <div>
                             <img  src={"data:image/png;base64,"+marker.shoutImage} />
                             <br/>
@@ -157,16 +157,17 @@ class App extends Component {
     }
 
 
-    handleToggle = () => {
-        this.setState({
-            isOpen: !false
-        });
+    handleToggle = (event) => {
+        this.setState(prevState =>({
+            isOpen: !prevState.isOpen
+        }));
+
     }
 
     handleClick = (marker, event) => {
-        this.setState({
-            isOpen: !false
-        });
+        this.setState(prevState =>({
+            isOpen: !prevState.isOpen
+        }));
 
         this.setState({ selectedMarker: marker });
         //console.log(this.state.mapShouts);
@@ -217,9 +218,10 @@ class App extends Component {
 
     myShoutCallBackForSelected = (callBackShoutSelected) => {
         this.setState({
-            selected: callBackShoutSelected,
-            selectedFromTable: null,
-            selectedMarker: null
+            selected: callBackShoutSelected, //What was selected from table - index id only
+            selectedFromTable: null, //What was selected from map - index id only
+            selectedMarker: null, //What was selected on map - complete object
+            isOpen: true //Toggle for picture pop up
         });
         //console.log(this.state.selected)
 
@@ -264,8 +266,8 @@ class App extends Component {
                                            zoomLevel = {this.state.zoomLevel}
                                            onZoomHandle = {this.handleZoom}
                                            onCenterHandle = {this.handleCenter}
-                                           onOpenHandle = {this.state.isOpen}/>
-                                           handleToggle = {this.handleToggle}
+                                           onOpenHandle = {this.state.isOpen}
+                                           handleMarkerToggle = {this.handleToggle}/>
 
 
 

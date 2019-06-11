@@ -128,7 +128,7 @@ class AddShout extends React.Component {
 
                     <form >
 
-                        <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} style = {{width: 400}}  />
+                        <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} fullWidth  />
                         <br/>
                         <br/>
                         <input type="file" onChange={this.fileChangedHandler} accept=".png,.jpg,.gif,.jpeg"/>
