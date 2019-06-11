@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'; //MIT
 import imageCompression from 'browser-image-compression';
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
-
+import './AppShout.css';
 
 class AddShout extends React.Component {
 
@@ -128,7 +128,7 @@ class AddShout extends React.Component {
 
                     <form >
 
-                        <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} fullWidth />
+                        <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} style = {{width: 400}}  />
                         <br/>
                         <br/>
                         <input type="file" onChange={this.fileChangedHandler} accept=".png,.jpg,.gif,.jpeg"/>

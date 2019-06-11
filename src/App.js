@@ -236,7 +236,7 @@ class App extends Component {
 
             >
 
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} sm={5}  >
                     <ShoutList myUserLocation = {userLocation}
                                theMapCenter = {this.state.myCenter}
                                callbackFromParent={this.myShoutCallback}
@@ -246,7 +246,7 @@ class App extends Component {
                     />
                 </Grid>
 
-                <Grid item xs={12} sm={6} >
+                <Grid item xs={12} sm={7} >
 
                     <MapWithControlledZoom myUserLocation = {userLocation}
                                            markers = {this.state.mapShouts}

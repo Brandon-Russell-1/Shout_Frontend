@@ -40,7 +40,7 @@ class ShoutList extends Component {
     componentDidMount() {
         this.fetchShouts();
 
-        var intervalId = setInterval(this.fetchShouts, 10000);
+        var intervalId = setInterval(this.fetchShouts, 120000);
         // store intervalId in the state so it can be accessed later:
         this.setState({intervalId: intervalId});
     }
@@ -211,6 +211,7 @@ class ShoutList extends Component {
 
         const columns = [                {
             Header: "Image",
+            width: 100,
             Cell: (row) => {
                 return <div>
 
@@ -223,17 +224,18 @@ class ShoutList extends Component {
         },{
             Header: 'Date Entered',
             accessor: 'shoutDate',
+            width: 90,
             Cell: this.renderEditable
         }, {
             Header: 'Shout Entry',
             accessor: 'shoutEntry',
             Cell: this.renderEditable,
-            width: 400
+            width: 275,style:{ 'white-space': 'unset'}
         },{
             id: 'savebutton',
             sortable: 'false',
             filterable: 'false',
-            width: 100,
+            width: 55,
             accessor: '_links.self.href',
             Cell: ({value,row}) =>
                 (<button onClick={() => {this.updateShout(row,value)}}>
