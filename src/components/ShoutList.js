@@ -2,19 +2,16 @@ import React, { Component } from 'react';
 import ReactTable from "react-table"; //MIT
 import 'react-table/react-table.css'; //MIT
 import 'react-confirm-alert/src/react-confirm-alert.css' //MIT
-
 import AddShout from "./AddShout.js";
 import { ToastContainer, toast } from 'react-toastify'; //MIT
 import 'react-toastify/dist/ReactToastify.css'; //MIT
 import {SERVER_URL} from '../constants.js';
 import Grid from "@material-ui/core/Grid"; //MIT
-
 import { throttle, debounce } from 'throttle-debounce';
 import {IP_URL} from "../constants";
-import * as ReactDOM from "react-dom";
-import SkyLight from "react-skylight";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button"; //MIT
+import {ZOOM_DEFAULT} from "../constants";
+import  point from '@turf/distance';
+import  distance from '@turf/distance';
 
 
 class ShoutList extends Component {
@@ -22,9 +19,12 @@ class ShoutList extends Component {
     constructor(props) {
         super(props);
         this.state = { shouts: [],
+                       shoutsTemp: [],
+                       shoutsTempIndexList: [],
+                       shoutsTempIndexListString: "&shouthave=0",
                        open: false,
                        message: '',
-                       zoomCheck: 16,
+                       zoomCheck: ZOOM_DEFAULT,
                        zoomSet: 10,
                        ipChecker: '',
                        originalIP: '',
@@ -59,6 +59,24 @@ class ShoutList extends Component {
     }
 
 
+    rad = (x) => {
+        return x * Math.PI / 180;
+    }
+
+    getDistance = (p1, p2) => {
+        var R = 6378137; // Earth’s mean radius in meter
+        var dLat = this.rad(p2[0] - p1[0]);
+        var dLong = this.rad(p2[1] - p1[1]);
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(this.rad(p1[0])) * Math.cos(this.rad(p2[0])) *
+            Math.sin(dLong / 2) * Math.sin(dLong / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        d *= 0.00062137;
+        //console.log(d);
+        return d; // returns the distance in miles
+    }
+
 
 
     //Fetch based on zoom and center
@@ -74,7 +92,7 @@ class ShoutList extends Component {
             if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0) {
                 console.log("User Location Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-                fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.myUserLocation.lat + "&userLong=" + this.props.myUserLocation.lng + "&zoom=" + this.state.zoomCheck)
+                fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.myUserLocation.lat + "&userLong=" + this.props.myUserLocation.lng + "&zoom=" + this.state.zoomCheck + this.state.zoomCheck + this.state.shoutsTempIndexListString)
                     .then((response) => response.json())
                     .then((responseData) => {
 
@@ -84,12 +102,35 @@ class ShoutList extends Component {
                         });
 
 
-                        this.props.callbackFromParent(responseData['_embedded']['shouts']);
+                        this.props.callbackFromParent(this.state.shouts);
                     })
                     .catch(err => console.error(err));
             } else {
                 console.log("Center Change Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.theMapCenter[0] + "&userLong=" + this.props.theMapCenter[1] + "&zoom=" + this.state.zoomCheck)
+
+                //Calculate what is still here, so database does not return unnecessary data
+                this.setState({shoutsTemp: [],
+                shoutsTempIndexListString: "",
+                shoutsTempIndexList: []});
+
+                {this.state.shouts.map(shout => {
+
+                    this.setState({ mydistance: this.getDistance([shout.shoutLat, shout.shoutLong],[this.props.theMapCenter[0], this.props.theMapCenter[1]])})
+                    console.log(this.state.mydistance);
+                    if(this.state.mydistance <= 156543.03392 * Math.cos(this.props.theMapCenter[0] * Math.PI / 180) / Math.pow(2, this.state.zoomCheck)){
+                        this.state.shoutsTemp.push(shout);
+
+                        this.state.shoutsTempIndexList.push(shout['_links']['self']['href'].substr(shout['_links']['self']['href'].lastIndexOf('/')+1));
+                    }
+                })}
+
+                this.setState({shoutsTempIndexListString: '&shouthave=' + this.state.shoutsTempIndexList.join('&shouthave=')});
+                console.log(this.state.shoutsTemp);
+                console.log(this.state.shoutsTempIndexList);
+                console.log(this.state.shoutsTempIndexListString);
+
+
+                fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.theMapCenter[0] + "&userLong=" + this.props.theMapCenter[1] + "&zoom=" + this.state.zoomCheck + this.state.shoutsTempIndexListString)
                     .then((response) => response.json())
                     .then((responseData) => {
 
@@ -98,7 +139,9 @@ class ShoutList extends Component {
                             shouts: responseData['_embedded']['shouts'],
                         });
 
-                        this.props.callbackFromParent(responseData['_embedded']['shouts']);
+                        this.state.shouts.push.apply(this.state.shouts, this.state.shoutsTemp);
+
+                        this.props.callbackFromParent(this.state.shouts);
 
                     })
 
@@ -125,19 +168,19 @@ class ShoutList extends Component {
 
         if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
             debounce(500, this.fetchShouts());
-            console.log("Call zoom fetch@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            console.log("Zoom Level at: " + this.props.myZoom + " - Min is: " + this.state.zoomSet)
+           // console.log("Call zoom fetch@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+          //  console.log("Zoom Level at: " + this.props.myZoom + " - Min is: " + this.state.zoomSet)
         }else if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .04 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .04){
-            console.log("Call zoom fetch@@@@@@@@@@@@@@@@@@@@@@@@@@@ w/Center Change");
-            console.log("Zoom Level at: " + this.props.myZoom + " - Min is: " + this.state.zoomSet)
+         //   console.log("Call zoom fetch@@@@@@@@@@@@@@@@@@@@@@@@@@@ w/Center Change");
+         //   console.log("Zoom Level at: " + this.props.myZoom + " - Min is: " + this.state.zoomSet)
         }else if (this.props.myZoom < this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .03){
           //  debounce(500, this.fetchShouts());
            // console.log("Do nothing");
         }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > 1 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > 1){
             debounce(500, this.fetchShouts());
-            console.log("Call center fetch%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-            console.log("Lat Difference: " + Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]));
-            console.log("Lng Difference: " + Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]));
+        //    console.log("Call center fetch%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+         //   console.log("Lat Difference: " + Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]));
+         //   console.log("Lng Difference: " + Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]));
         }
     }
 

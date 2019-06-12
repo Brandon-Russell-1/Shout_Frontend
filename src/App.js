@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ShoutList from "./components/ShoutList";
 import Grid from "@material-ui/core/Grid";
+import {ZOOM_DEFAULT, GOOGLE_MAP_URL} from "./constants";
 
 const { compose, withProps, withState, withHandlers } = require("recompose");
 const {
@@ -14,12 +15,12 @@ const {
 
 const MapWithControlledZoom = compose(
     withProps({
-        googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyB_hkyArIHX2mBEsaWfcPUwjqv9_rNhCro&v=3.exp&libraries=geometry,drawing,places",
+        googleMapURL: GOOGLE_MAP_URL,
         loadingElement: <div style={{ height: `100%` }} />,
         containerElement: <div style={{ height: `800px` }} />,
         mapElement: <div style={{ height: `100%` }} />,
     }),
-    withState('zoom', 'onZoomChange', 16),
+    withState('zoom', 'onZoomChange', ZOOM_DEFAULT),
     withState('center', 'onCenterChange', [0,0]),
     withHandlers(() => {
         let map;
@@ -133,7 +134,7 @@ class App extends Component {
             mapShouts: [],
             loading: true,
             selectedMarker: false,
-            zoomLevel: 16,
+            zoomLevel: ZOOM_DEFAULT,
             myCenter: [0,0],
             selected: null,
             selectedFromTable: null,
@@ -209,7 +210,7 @@ class App extends Component {
     resetMapCenterCallBack = (mapResetUserLocation) => {
 
        this.setState({userLocation: { lat: mapResetUserLocation['lat'], lng: mapResetUserLocation['lng'] }});
-        this.setState({ zoomLevel: 16 });
+        this.setState({ zoomLevel: ZOOM_DEFAULT });
         this.setState({
             selected: null, //What was selected from table - index id only
             selectedFromTable: null, //What was selected from map - index id only
