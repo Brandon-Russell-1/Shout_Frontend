@@ -24,7 +24,7 @@ class ShoutList extends Component {
         this.state = { shouts: [],
                        open: false,
                        message: '',
-                       zoomCheck: 15,
+                       zoomCheck: 16,
                        zoomSet: 10,
                        ipChecker: '',
                        originalIP: '',
@@ -72,6 +72,7 @@ class ShoutList extends Component {
 
 
             if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0) {
+                console.log("User Location Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                 fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.myUserLocation.lat + "&userLong=" + this.props.myUserLocation.lng + "&zoom=" + this.state.zoomCheck)
                     .then((response) => response.json())
@@ -87,7 +88,7 @@ class ShoutList extends Component {
                     })
                     .catch(err => console.error(err));
             } else {
-
+                console.log("Center Change Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.theMapCenter[0] + "&userLong=" + this.props.theMapCenter[1] + "&zoom=" + this.state.zoomCheck)
                     .then((response) => response.json())
                     .then((responseData) => {
@@ -113,14 +114,27 @@ class ShoutList extends Component {
 
     componentDidUpdate(prevProps, prevState) {
 
+        //What was selected from map check. If not same, null out table selection
         if(this.props.myselectedFromTable !== prevProps.myselectedFromTable){
             this.setState({selectedIndex: null})
         }
 
-        if(prevProps.myZoom!==this.props.myZoom){
-            debounce(400, this.fetchShouts());
-        }else if (prevProps.theMapCenter[0]!==this.props.theMapCenter[0] && prevProps.theMapCenter[1]!==this.props.theMapCenter[1]){
-            debounce(400, this.fetchShouts());
+
+
+
+
+        if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
+            debounce(500, this.fetchShouts());
+            console.log("Call zoom fetch@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            console.log("Zoom Level at: " + this.props.myZoom + " - Min is: " + this.state.zoomSet)
+        }else if (this.props.myZoom < this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .03){
+          //  debounce(500, this.fetchShouts());
+           // console.log("Do nothing");
+        }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .1 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .1){
+            debounce(500, this.fetchShouts());
+            console.log("Call center fetch%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            console.log("Lat Difference: " + Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]));
+            console.log("Lng Difference: " + Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]));
         }
     }
 

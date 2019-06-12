@@ -37,7 +37,7 @@ class AddShout extends React.Component {
 
             var options = {
                 maxSizeMB: 0.5,
-                maxWidthOrHeight: 720,
+                maxWidthOrHeight: 480,
                 useWebWorker: true
             }
             this.setState({progressBarStatus: 10})
