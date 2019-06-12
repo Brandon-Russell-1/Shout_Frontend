@@ -127,10 +127,13 @@ class ShoutList extends Component {
             debounce(500, this.fetchShouts());
             console.log("Call zoom fetch@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             console.log("Zoom Level at: " + this.props.myZoom + " - Min is: " + this.state.zoomSet)
+        }else if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .04 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .04){
+            console.log("Call zoom fetch@@@@@@@@@@@@@@@@@@@@@@@@@@@ w/Center Change");
+            console.log("Zoom Level at: " + this.props.myZoom + " - Min is: " + this.state.zoomSet)
         }else if (this.props.myZoom < this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .03){
           //  debounce(500, this.fetchShouts());
            // console.log("Do nothing");
-        }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .1 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .1){
+        }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > 1 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > 1){
             debounce(500, this.fetchShouts());
             console.log("Call center fetch%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
             console.log("Lat Difference: " + Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]));
