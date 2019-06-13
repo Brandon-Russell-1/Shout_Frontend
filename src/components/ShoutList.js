@@ -40,7 +40,7 @@ class ShoutList extends Component {
     componentDidMount() {
         this.fetchShouts();
 
-        var intervalId = setInterval(this.fetchShouts, 3000);
+        var intervalId = setInterval(this.fetchShouts, 120000);
         // store intervalId in the state so it can be accessed later:
         this.setState({intervalId: intervalId});
     }
@@ -106,38 +106,33 @@ class ShoutList extends Component {
                     })
                     .catch(err => console.error(err));
             } else {
-            //    console.log("Center Change Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                 //Calculate what is still here, so database does not return unnecessary data
                 this.setState({shoutsTemp: [],
                shoutsTempIndexListString: "",
                 shoutsTempIndexList: []});
 
-                {this.state.shouts.map(shout => {
-
+                this.state.shouts.forEach(shout => {
                     this.setState({ mydistance: this.getDistance([shout.shoutLat, shout.shoutLong],[this.props.theMapCenter[0], this.props.theMapCenter[1]])})
-                   // console.log(this.state.mydistance);
+
                     if(this.state.mydistance <= 156543.03392 * Math.cos(this.props.theMapCenter[0] * Math.PI / 180) / Math.pow(2, this.state.zoomCheck)){
                         if(this.state.shoutsTemp.includes(shout)){
                       //      console.log("do nothing")
                         }else{
-                      //      console.log("push!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                            console.log("push!!!!!!!!!!!!!!!!!!!!!!!!!!")
                             this.state.shoutsTemp.push(shout);
                             this.state.shoutsTempIndexList.push(shout['_links']['self']['href'].substr(shout['_links']['self']['href'].lastIndexOf('/')+1));
+                            console.log(this.state.shoutsTemp)
+                            console.log(this.state.shoutsTempIndexList)
+                            //return shout;
                         }
 
                     }
-                })}
-                this.setState({shoutsTempIndexListString: '&shouthave=' + this.state.shoutsTempIndexList.join('&shouthave=')});
-
-
+                })
+                this.setState({shoutsTempIndexListString: '&shouthave=' + this.state.shoutsTempIndexList.join()});
                 if(this.state.shoutsTempIndexList && this.state.shoutsTempIndexList.length === 0){
                     this.setState({shoutsTempIndexListString: "&shouthave=0"})
                 }
-
-              //  console.log(this.props.theMapCenter[0] + " : " + this.props.theMapCenter[1]);
-             //   console.log(this.state.shoutsTempIndexListString);
-
 
                 fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.theMapCenter[0] + "&userLong=" + this.props.theMapCenter[1] + "&zoom=" + this.state.zoomCheck + this.state.shoutsTempIndexListString)
                     .then((response) => response.json())
@@ -148,18 +143,23 @@ class ShoutList extends Component {
                             shouts: responseData['_embedded']['shouts'],
                         });
 
-                  //      console.log(this.state.zoomCheck);
-                 //       console.log(this.state.shoutsTemp);
-                //        console.log(this.state.shouts);
-                        this.state.shouts.push.apply(this.state.shouts, this.state.shoutsTemp);
 
-                //        console.log(this.state.shouts);
-                        this.props.callbackFromParent(this.state.shouts);
 
                     })
-
                     .catch(err => console.error(err));
 
+                console.log("zoom:");
+                console.log(this.state.zoomCheck);
+                console.log("shouts temp:");
+                console.log(this.state.shoutsTemp);
+                console.log("shout temp string:");
+                console.log(this.state.shoutsTempIndexListString)
+                console.log("shout new:");
+                console.log(this.state.shouts);
+                this.state.shouts.push.apply(this.state.shouts, this.state.shoutsTemp);
+                console.log("shouts combined:");
+                console.log(this.state.shouts);
+                this.props.callbackFromParent(this.state.shouts);
 
             }
 
@@ -179,23 +179,24 @@ class ShoutList extends Component {
 
 
 
-/*        if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
-          //  console.log("zoom$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
+           console.log("zoom$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
-            this.setState({intervalId: setInterval(this.fetchShouts, 2000)});
+           this.fetchShouts();
+            //throttle(50, this.fetchShouts);
 
 
         }else if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .04 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .04){
-         //   console.log("zoom_center%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-            //throttle(100, this.fetchShouts);
-            this.setState({intervalId: setInterval(this.fetchShouts, 2000)});
+            console.log("zoom_center%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            throttle(50, this.fetchShouts);
+            //this.setState({intervalId: setInterval(this.fetchShouts, 2000)});
         }else if (this.props.myZoom < this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .03){
             //this.setState({intervalId: setInterval(this.fetchShouts, 120000)});
         }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .5 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .5){
-         //   console.log("center@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            //throttle(100, this.fetchShouts);
-            this.setState({intervalId: setInterval(this.fetchShouts, 2000)});
-        }*/
+            console.log("center@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            throttle(50, this.fetchShouts);
+            //this.setState({intervalId: setInterval(this.fetchShouts, 2000)});
+        }
     }
 
 
