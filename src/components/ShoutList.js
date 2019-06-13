@@ -92,7 +92,7 @@ class ShoutList extends Component {
             if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0) {
              //   console.log("User Location Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-                fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.myUserLocation.lat + "&userLong=" + this.props.myUserLocation.lng + "&zoom=" + this.state.zoomCheck +  this.state.shoutsTempIndexListString)
+                fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.myUserLocation.lat + "&userLong=" + this.props.myUserLocation.lng + "&zoom=" + this.state.zoomCheck +  "&shouthave=0")
                     .then((response) => response.json())
                     .then((responseData) => {
 
@@ -109,64 +109,64 @@ class ShoutList extends Component {
 
                 //Calculate what is still here, so database does not return unnecessary data
                 this.setState({shoutsTemp: [],
-               shoutsTempIndexListString: "",
-                shoutsTempIndexList: []});
+                    shoutsTempIndexListString: "&shouthave=0"});
 
-                this.state.shouts.forEach(shout => {
-                    this.setState({ mydistance: this.getDistance([shout.shoutLat, shout.shoutLong],[this.props.theMapCenter[0], this.props.theMapCenter[1]])})
+                this.findPrevShouts().then(shoutsPrevTemp => {
+                    this.setState({shoutsTemp: shoutsPrevTemp});            });
 
-                    if(this.state.mydistance <= 156543.03392 * Math.cos(this.props.theMapCenter[0] * Math.PI / 180) / Math.pow(2, this.state.zoomCheck)){
-                        if(this.state.shoutsTemp.includes(shout)){
-                      //      console.log("do nothing")
-                        }else{
-                            console.log("push!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                            this.state.shoutsTemp.push(shout);
-                            this.state.shoutsTempIndexList.push(shout['_links']['self']['href'].substr(shout['_links']['self']['href'].lastIndexOf('/')+1));
-                            console.log(this.state.shoutsTemp)
-                            console.log(this.state.shoutsTempIndexList)
-                            //return shout;
-                        }
 
-                    }
-                })
-                this.setState({shoutsTempIndexListString: '&shouthave=' + this.state.shoutsTempIndexList.join()});
-                if(this.state.shoutsTempIndexList && this.state.shoutsTempIndexList.length === 0){
-                    this.setState({shoutsTempIndexListString: "&shouthave=0"})
-                }
+                console.log("shout temp string:");
+                console.log(this.state.shoutsTempIndexListString);
 
                 fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.theMapCenter[0] + "&userLong=" + this.props.theMapCenter[1] + "&zoom=" + this.state.zoomCheck + this.state.shoutsTempIndexListString)
                     .then((response) => response.json())
                     .then((responseData) => {
-
 
                         this.setState({
                             shouts: responseData['_embedded']['shouts'],
                         });
 
 
+                        console.log("shout old:");
+                        console.log(this.state.shoutsTemp);
+
+                        console.log("shouts new:");
+                        console.log(this.state.shouts);
+
+                        this.state.shouts.push.apply(this.state.shouts, this.state.shoutsTemp);
+
+                        console.log("shouts combined:");
+                        console.log(this.state.shouts);
+
+                        this.props.callbackFromParent(this.state.shouts);
 
                     })
                     .catch(err => console.error(err));
 
-                console.log("zoom:");
-                console.log(this.state.zoomCheck);
-                console.log("shouts temp:");
-                console.log(this.state.shoutsTemp);
-                console.log("shout temp string:");
-                console.log(this.state.shoutsTempIndexListString)
-                console.log("shout new:");
-                console.log(this.state.shouts);
-                this.state.shouts.push.apply(this.state.shouts, this.state.shoutsTemp);
-                console.log("shouts combined:");
-                console.log(this.state.shouts);
-                this.props.callbackFromParent(this.state.shouts);
+
+
 
             }
 
-
         }
 
+        findPrevShouts = () =>{
 
+return new Promise((resolve, reject) =>{
+
+
+    this.setState({shoutsPrevTemp: []});
+
+            this.state.shouts.map(shout => {
+                this.setState({ mydistance: this.getDistance([shout.shoutLat, shout.shoutLong],[this.props.theMapCenter[0], this.props.theMapCenter[1]])})
+                if(this.state.mydistance <= 156543.03392 * Math.cos(this.props.theMapCenter[0] * Math.PI / 180) / Math.pow(2, this.state.zoomCheck)){
+                        this.state.shoutsPrevTemp.push(shout);
+                        this.state.shoutsTempIndexListString += "," + shout['_links']['self']['href'].substr(shout['_links']['self']['href'].lastIndexOf('/')+1);
+                }
+            })
+            resolve(this.state.shoutsPrevTemp);
+        });
+        }
 
     componentDidUpdate(prevProps, prevState) {
 
@@ -176,41 +176,37 @@ class ShoutList extends Component {
         }
 
 
-
-
-
         if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
            console.log("zoom$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-
            this.fetchShouts();
-            //throttle(50, this.fetchShouts);
-
-
+           // debounce(500, this.fetchShouts());
         }else if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .04 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .04){
             console.log("zoom_center%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-            throttle(50, this.fetchShouts);
-            //this.setState({intervalId: setInterval(this.fetchShouts, 2000)});
+            this.fetchShouts();
         }else if (this.props.myZoom < this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .03){
             //this.setState({intervalId: setInterval(this.fetchShouts, 120000)});
         }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .5 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .5){
             console.log("center@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            throttle(50, this.fetchShouts);
-            //this.setState({intervalId: setInterval(this.fetchShouts, 2000)});
+            this.fetchShouts();
         }
     }
 
 
     // Add new shout
-    addShout(shout) {
+    addShout = (shout) => {
 
         fetch(SERVER_URL+'/add', { method: 'POST', headers: {}, body: shout})
             .then( res => {
                 toast.success("Shout Added", {
                     position: toast.POSITION.BOTTOM_LEFT
                 });
-                this.fetchShouts();
+
             })
             .catch(err => console.error(err))
+        this.setState({
+            shouts: []
+        });
+        this.fetchShouts();
     }
 
     renderEditable = (cellInfo) => {
