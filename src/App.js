@@ -30,14 +30,9 @@ const MapWithControlledZoom = compose(
                 map = ref
             },
             onZoomChanged: ({ onZoomChange }) => () => {
-                if(map.getZoom() < 9){
-                    console.log(map.getZoom())
-                    return onZoomChange(9);
-                }else{
-                    return onZoomChange(map.getZoom())    ;
-                }
 
-            },
+                    return onZoomChange(map.getZoom())    ;
+              },
             onCenterChanged: ({onCenterChange}) => () => {
                 return  onCenterChange([map.getCenter().lat(), map.getCenter().lng()]);
             }
