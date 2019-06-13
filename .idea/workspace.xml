@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="988d47bf-f915-4d8f-9625-780fb2840ac7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants.js" afterDir="false" />
-    </list>
+    <list default="true" id="988d47bf-f915-4d8f-9625-780fb2840ac7" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -53,8 +51,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/constants.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+            <state>
+              <caret column="2" selection-start-column="2" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -143,7 +141,7 @@
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-1928" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
@@ -240,12 +238,12 @@
       <workItem from="1560377035941" duration="9319000" />
       <workItem from="1560388002030" duration="4000" />
       <workItem from="1560414417209" duration="3523000" />
-      <workItem from="1560427835491" duration="12162000" />
+      <workItem from="1560427835491" duration="13051000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="298447000" />
+    <option name="totallyTimeSpent" value="299336000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -465,8 +463,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/constants.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+        <state>
+          <caret column="2" selection-start-column="2" selection-end-column="2" />
         </state>
       </provider>
     </entry>
