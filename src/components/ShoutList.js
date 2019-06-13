@@ -92,6 +92,7 @@ class ShoutList extends Component {
             if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0) {
              //   console.log("User Location Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
+
                 fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.myUserLocation.lat + "&userLong=" + this.props.myUserLocation.lng + "&zoom=" + this.state.zoomCheck +  "&shouthave=0")
                     .then((response) => response.json())
                     .then((responseData) => {
@@ -107,12 +108,13 @@ class ShoutList extends Component {
                     .catch(err => console.error(err));
             } else {
 
+
                 //Calculate what is still here, so database does not return unnecessary data
                 this.setState({shoutsTemp: [],
                     shoutsTempIndexListString: "&shouthave=0"});
 
-                this.findPrevShouts().then(shoutsPrevTemp => {
-                    this.setState({shoutsTemp: shoutsPrevTemp});            });
+                this.findPrevShouts().then((shoutsPrevTemp) => {
+                    this.setState({shoutsTemp: shoutsPrevTemp});    });
 
 
                 console.log("shout temp string:");
@@ -127,12 +129,14 @@ class ShoutList extends Component {
                         });
 
 
+
                         console.log("shout old:");
                         console.log(this.state.shoutsTemp);
 
                         console.log("shouts new:");
                         console.log(this.state.shouts);
 
+                       // this.state.shouts.concat(this.state.shoutsTemp);
                         this.state.shouts.push.apply(this.state.shouts, this.state.shoutsTemp);
 
                         console.log("shouts combined:");
@@ -152,10 +156,10 @@ class ShoutList extends Component {
 
         findPrevShouts = () =>{
 
-return new Promise((resolve, reject) =>{
+        return new Promise((resolve, reject) =>{
 
+            this.setState({shoutsPrevTemp: []});
 
-    this.setState({shoutsPrevTemp: []});
 
             this.state.shouts.map(shout => {
                 this.setState({ mydistance: this.getDistance([shout.shoutLat, shout.shoutLong],[this.props.theMapCenter[0], this.props.theMapCenter[1]])})
@@ -176,18 +180,14 @@ return new Promise((resolve, reject) =>{
         }
 
 
-        if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
-           console.log("zoom$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-           this.fetchShouts();
-           // debounce(500, this.fetchShouts());
-        }else if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .04 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .04){
-            console.log("zoom_center%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-            this.fetchShouts();
-        }else if (this.props.myZoom < this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .03){
-            //this.setState({intervalId: setInterval(this.fetchShouts, 120000)});
-        }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .5 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .5){
-            console.log("center@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            this.fetchShouts();
+/*        if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
+         //   this.fetchShouts();
+        }else */if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .02 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .02){
+            debounce(4000, this.fetchShouts());
+        }else if (this.props.myZoom < this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .01 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .01){
+
+        }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > 1 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > 1){
+            debounce(4000, this.fetchShouts());
         }
     }
 
@@ -198,15 +198,16 @@ return new Promise((resolve, reject) =>{
         fetch(SERVER_URL+'/add', { method: 'POST', headers: {}, body: shout})
             .then( res => {
                 toast.success("Shout Added", {
-                    position: toast.POSITION.BOTTOM_LEFT
+                    position: toast.POSITION.BOTTOM_LEFT});
+
+                this.setState({
+                    shouts: []
                 });
+                this.fetchShouts();
 
             })
             .catch(err => console.error(err))
-        this.setState({
-            shouts: []
-        });
-        this.fetchShouts();
+
     }
 
     renderEditable = (cellInfo) => {
