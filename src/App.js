@@ -13,6 +13,7 @@ const {
     GoogleMap,
     Marker,
     InfoWindow,
+    Circle
 } = require("react-google-maps");
 
 const MapWithControlledZoom = compose(
@@ -57,6 +58,12 @@ const MapWithControlledZoom = compose(
         {props.onCenterHandle(props.center)}
         {props.onZoomHandle(props.zoom)}
 
+
+        <Circle
+            center={props.myUserLocation}
+            //onCenterChanged={props.onCenterChanged}
+            radius={10000}
+        />
 
         <Marker
             position={{ lat: props.myUserLocation.lat, lng: props.myUserLocation.lng }}
