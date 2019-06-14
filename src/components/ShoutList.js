@@ -7,11 +7,8 @@ import { ToastContainer, toast } from 'react-toastify'; //MIT
 import 'react-toastify/dist/ReactToastify.css'; //MIT
 import {SERVER_URL} from '../constants.js';
 import Grid from "@material-ui/core/Grid"; //MIT
-import { throttle, debounce } from 'throttle-debounce';
 import {IP_URL} from "../constants";
 import {ZOOM_DEFAULT, ZOOM_MAX} from "../constants";
-import  point from '@turf/distance';
-import  distance from '@turf/distance';
 import _ from 'lodash';
 
 class ShoutList extends Component {
@@ -320,6 +317,7 @@ class ShoutList extends Component {
             Header: 'Shout Entry',
             accessor: 'shoutEntry',
             Cell: this.renderEditable,
+            //Cell: row => <div><span title={row.value}>{row.value}</span></div>,
             width: 275,style:{ 'white-space': 'unset'}
         },{
             id: 'savebutton',
@@ -346,7 +344,8 @@ class ShoutList extends Component {
                             filterable={true} pageSize={5}   showPageSizeOptions = {false} defaultPageSize = {5}
 
 
-                            getTrProps={(state, rowInfo) => {
+
+                            getTdProps={(state, rowInfo) => {
                                 if (rowInfo && rowInfo.row) {
                                     return {
                                         onClick: (e) => {

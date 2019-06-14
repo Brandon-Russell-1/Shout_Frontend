@@ -6,6 +6,7 @@ import {ZOOM_DEFAULT, GOOGLE_MAP_URL, ZOOM_MAX} from "./constants";
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 
+
 const { compose, withProps, withState, withHandlers } = require("recompose");
 const {
     withScriptjs,
@@ -89,6 +90,8 @@ const MapWithControlledZoom = compose(
                     <Marker
                         key={marker.id}
                         onClick={onClick}
+                        onMouseOver={onClick}
+                        onMouseOut={infoClick}
                         position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
                         options={{icon: process.env.PUBLIC_URL + '/SelectedFlag.png'}}
 
@@ -112,6 +115,8 @@ const MapWithControlledZoom = compose(
                 <Marker
                     key={marker.id}
                     onClick={onClick}
+                    onMouseOver={onClick}
+                    onMouseOut={infoClick}
                     position={{ lat: marker.shoutLat, lng: marker.shoutLong }}
                     options={{icon: process.env.PUBLIC_URL + '/Pin.png'}}
 
@@ -151,6 +156,14 @@ class App extends Component {
 
 
     }
+
+    static defaultProps = {
+        center: {
+            lat: 59.95,
+            lng: 30.33
+        },
+        zoom: 11
+    };
 
 
     handleToggle = (event) => {
@@ -283,6 +296,7 @@ class App extends Component {
 
                 <Grid item xs={12} sm={7} >
 
+
                     <MapWithControlledZoom myUserLocation = {userLocation}
                                            markers = {this.state.mapShouts}
                                            onMarkerClick={this.handleClick}
@@ -293,6 +307,8 @@ class App extends Component {
                                            onCenterHandle = {this.handleCenter}
                                            onOpenHandle = {this.state.isOpen}
                                            handleMarkerToggle = {this.handleToggle}/>
+
+
 
 
 
