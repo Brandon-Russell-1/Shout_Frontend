@@ -9,3 +9,5 @@ export const IP_URL = 'https://api.ipdata.co/?api-key=2b582d1c4181bc0085b1d0d180
 export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB_hkyArIHX2mBEsaWfcPUwjqv9_rNhCro&v=3.exp&libraries=geometry,drawing,places'
 
 export const ZOOM_DEFAULT = 16
+
+export const ZOOM_MAX = 11

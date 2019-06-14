@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ShoutList from "./components/ShoutList";
 import Grid from "@material-ui/core/Grid";
-import {ZOOM_DEFAULT, GOOGLE_MAP_URL} from "./constants";
+import {ZOOM_DEFAULT, GOOGLE_MAP_URL, ZOOM_MAX} from "./constants";
 
 const { compose, withProps, withState, withHandlers } = require("recompose");
 const {
@@ -41,12 +41,15 @@ const MapWithControlledZoom = compose(
     withScriptjs,
     withGoogleMap
 )(props =>
+
     <GoogleMap
+        options = {{minZoom: ZOOM_MAX}}
         center={props.myUserLocation}
         zoom={props.zoomLevel}
         ref={props.onMapMounted}
         onZoomChanged={props.onZoomChanged}
         onCenterChanged={props.onCenterChanged}
+
     >
 
         {props.onCenterHandle(props.center)}

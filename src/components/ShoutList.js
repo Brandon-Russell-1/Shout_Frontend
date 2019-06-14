@@ -9,7 +9,7 @@ import {SERVER_URL} from '../constants.js';
 import Grid from "@material-ui/core/Grid"; //MIT
 import { throttle, debounce } from 'throttle-debounce';
 import {IP_URL} from "../constants";
-import {ZOOM_DEFAULT} from "../constants";
+import {ZOOM_DEFAULT, ZOOM_MAX} from "../constants";
 import  point from '@turf/distance';
 import  distance from '@turf/distance';
 
@@ -25,7 +25,7 @@ class ShoutList extends Component {
                        open: false,
                        message: '',
                        zoomCheck: ZOOM_DEFAULT,
-                       zoomSet: 10,
+                       zoomSet: ZOOM_MAX,
                        ipChecker: '',
                        originalIP: '',
                        selected: null,
@@ -178,16 +178,18 @@ class ShoutList extends Component {
         if(this.props.myselectedFromTable !== prevProps.myselectedFromTable){
             this.setState({selectedIndex: null})
         }
-
-
+//console.log(this.state.zoomCheck);
+//console.log( 156543.03392 * Math.cos(this.props.theMapCenter[0] * Math.PI / 180) / Math.pow(2, this.state.zoomCheck));
 /*        if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
          //   this.fetchShouts();
-        }else */if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > .02 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > .02){
-            debounce(4000, this.fetchShouts());
-        }else if (this.props.myZoom < this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .01 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .01){
+        }else */if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) >= .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) >= .03 ){
+            console.log(this.props.myZoom);
+            debounce(300, this.fetchShouts());
+        }else if (this.props.myZoom < this.state.zoomSet || Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .03){
 
         }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > 1 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > 1){
-            debounce(4000, this.fetchShouts());
+            console.log(this.props.myZoom);
+            debounce(300, this.fetchShouts());
         }
     }
 
