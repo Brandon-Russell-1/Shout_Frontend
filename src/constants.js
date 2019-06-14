@@ -10,4 +10,4 @@ export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaS
 
 export const ZOOM_DEFAULT = 16
 
-export const ZOOM_MAX = 11
+export const ZOOM_MAX = 10

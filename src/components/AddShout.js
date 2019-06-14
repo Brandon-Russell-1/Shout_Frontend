@@ -28,11 +28,39 @@ class AddShout extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        //Compress PNG and JPEG files
-        if ( this.state.selectedFile.type === "image/png" ||
+
+
+        if(!this.state.selectedFile){
+
+            this.setState({progressBarStatus: 10})
+            //Get IP
+            fetch(IP_URL)
+                .then((response) => response.json())
+                .then((responseData) => {
+
+                    this.setState({
+                        shoutIp: responseData['ip'],
+                    });
+                    this.setState({progressBarStatus: 50})
+                    let newShout = new FormData();
+                    //newShout.append('shoutImage', this.state.selectedFile);
+                    newShout.append('shoutIp', this.state.shoutIp);
+                    newShout.append('shoutEntry', this.state.shoutEntry);
+                    newShout.append('shoutLat', this.props.myUserLocation.lat);
+                    newShout.append('shoutLong', this.props.myUserLocation.lng)
+                    this.setState({progressBarStatus: 80})
+                    this.props.addShout(newShout);
+                    this.setState({progressBarStatus: 100})
+                    this.refs.addDialog.hide();
+
+                })
+                .catch(err => console.error(err));
+
+        } else if ( this.state.selectedFile.type === "image/png" ||
             this.state.selectedFile.type === "image/jpg" ||
             this.state.selectedFile.type === "image/jpeg"){
 
+            //Compress PNG and JPEG files
             var imageFile = this.state.selectedFile;
 
             var options = {

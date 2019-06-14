@@ -3,6 +3,8 @@ import './App.css';
 import ShoutList from "./components/ShoutList";
 import Grid from "@material-ui/core/Grid";
 import {ZOOM_DEFAULT, GOOGLE_MAP_URL, ZOOM_MAX} from "./constants";
+import { Progress } from 'react-sweet-progress';
+import "react-sweet-progress/lib/style.css";
 
 const { compose, withProps, withState, withHandlers } = require("recompose");
 const {
@@ -43,7 +45,7 @@ const MapWithControlledZoom = compose(
 )(props =>
 
     <GoogleMap
-        options = {{minZoom: ZOOM_MAX}}
+        options = {{minZoom: ZOOM_MAX, maxZoom: ZOOM_DEFAULT}}
         center={props.myUserLocation}
         zoom={props.zoomLevel}
         ref={props.onMapMounted}
@@ -136,7 +138,8 @@ class App extends Component {
             myCenter: [0,0],
             selected: null,
             selectedFromTable: null,
-            isOpen: false
+            isOpen: false,
+            progressBarStatus: 0
             };
 
 
@@ -218,6 +221,11 @@ class App extends Component {
 
     }
 
+    //Call back to update Progress Bar
+    updateProgressBarStatusCallBack = (statusBarUpdate) => {
+        this.setState({progressBarStatus: statusBarUpdate})
+    }
+
   render() {
 
       const { loading, userLocation } = this.state;
@@ -238,6 +246,23 @@ class App extends Component {
             >
 
                 <Grid item xs={12} sm={5}  >
+                    <Progress
+                        theme={{
+                            success: {
+                                symbol: '',//🏄
+                                color: '#181899'
+                            },
+                            active: {
+                                symbol: '',//🔥
+                                color: '#fbc630'
+                            },
+                            default: {
+                                symbol: '',//😀   😱
+                                color: '#fbc630'
+                            }
+                        }}
+                        percent={this.state.progressBarStatus}
+                         />
                     <ShoutList myUserLocation = {userLocation}
                                theMapCenter = {this.state.myCenter}
                                callbackFromParent={this.myShoutCallback}
@@ -245,6 +270,7 @@ class App extends Component {
                                myZoom = {this.state.zoomLevel}
                                myselectedFromTable = {this.state.selectedFromTable}
                                myResetMapLocationCallBack = {this.resetMapCenterCallBack}
+                               myUpdateProgressBarStatusCallBack = {this.updateProgressBarStatusCallBack}
                     />
                 </Grid>
 

@@ -81,7 +81,7 @@ class ShoutList extends Component {
 
     //Fetch based on zoom and center
     fetchShouts = () => {
-
+        this.props.myUpdateProgressBarStatusCallBack(0);
         if (this.props.myZoom >= this.state.zoomSet){
             this.setState({zoomCheck: this.props.myZoom})
         }else if (this.props.myZoom < this.state.zoomSet) {
@@ -92,22 +92,24 @@ class ShoutList extends Component {
             if (this.props.theMapCenter[0] === 0 && this.props.theMapCenter[1] === 0) {
              //   console.log("User Location Fetch!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-
+                this.props.myUpdateProgressBarStatusCallBack(10);
                 fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.myUserLocation.lat + "&userLong=" + this.props.myUserLocation.lng + "&zoom=" + this.state.zoomCheck +  "&shouthave=0")
                     .then((response) => response.json())
                     .then((responseData) => {
 
-
+                        this.props.myUpdateProgressBarStatusCallBack(50);
                         this.setState({
                             shouts: responseData['_embedded']['shouts'],
                         });
 
 
                         this.props.callbackFromParent(this.state.shouts);
+                        this.props.myUpdateProgressBarStatusCallBack(100);
                     })
                     .catch(err => console.error(err));
             } else {
 
+                this.props.myUpdateProgressBarStatusCallBack(0);
 
                 //Calculate what is still here, so database does not return unnecessary data
                 this.setState({shoutsTemp: [],
@@ -116,14 +118,14 @@ class ShoutList extends Component {
                 this.findPrevShouts().then((shoutsPrevTemp) => {
                     this.setState({shoutsTemp: shoutsPrevTemp});    });
 
-
+                this.props.myUpdateProgressBarStatusCallBack(10);
                 console.log("shout temp string:");
                 console.log(this.state.shoutsTempIndexListString);
 
                 fetch(SERVER_URL + "/shouts/search/findUserLocationShouts?userLat=" + this.props.theMapCenter[0] + "&userLong=" + this.props.theMapCenter[1] + "&zoom=" + this.state.zoomCheck + this.state.shoutsTempIndexListString)
                     .then((response) => response.json())
                     .then((responseData) => {
-
+                        this.props.myUpdateProgressBarStatusCallBack(50);
                         this.setState({
                             shouts: responseData['_embedded']['shouts'],
                         });
@@ -143,6 +145,7 @@ class ShoutList extends Component {
                         console.log(this.state.shouts);
 
                         this.props.callbackFromParent(this.state.shouts);
+                        this.props.myUpdateProgressBarStatusCallBack(100);
 
                     })
                     .catch(err => console.error(err));
@@ -196,20 +199,26 @@ class ShoutList extends Component {
 
     // Add new shout
     addShout = (shout) => {
+        if (shout.has('shoutImage')) {
+            fetch(SERVER_URL + '/add', {method: 'POST', headers: {}, body: shout})
+                .then(res => {
+                    toast.success("Shout Added", {
+                        position: toast.POSITION.BOTTOM_LEFT
+                    });
 
-        fetch(SERVER_URL+'/add', { method: 'POST', headers: {}, body: shout})
-            .then( res => {
-                toast.success("Shout Added", {
-                    position: toast.POSITION.BOTTOM_LEFT});
+                    this.setState({
+                        shouts: []
+                    });
+                    this.fetchShouts();
 
-                this.setState({
-                    shouts: []
-                });
-                this.fetchShouts();
-
-            })
-            .catch(err => console.error(err))
-
+                })
+                .catch(err => console.error(err))
+        }else{
+            //No Image upload
+            toast.error("Shout Image?", {
+                position: toast.POSITION.BOTTOM_LEFT
+            });
+        }
     }
 
     renderEditable = (cellInfo) => {
