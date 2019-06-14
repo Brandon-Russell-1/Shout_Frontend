@@ -12,7 +12,7 @@ import {IP_URL} from "../constants";
 import {ZOOM_DEFAULT, ZOOM_MAX} from "../constants";
 import  point from '@turf/distance';
 import  distance from '@turf/distance';
-
+import _ from 'lodash';
 
 class ShoutList extends Component {
 
@@ -31,8 +31,9 @@ class ShoutList extends Component {
                        selected: null,
                        selectedIndex: null
 
-                       };
 
+                       };
+        this.debouncedOnChangeFetch = _.debounce(this.fetchShouts.bind(this), 500);
 
     }
 
@@ -81,6 +82,8 @@ class ShoutList extends Component {
 
     //Fetch based on zoom and center
     fetchShouts = () => {
+
+
         this.props.myUpdateProgressBarStatusCallBack(0);
         if (this.props.myZoom >= this.state.zoomSet){
             this.setState({zoomCheck: this.props.myZoom})
@@ -185,14 +188,18 @@ class ShoutList extends Component {
 //console.log( 156543.03392 * Math.cos(this.props.theMapCenter[0] * Math.PI / 180) / Math.pow(2, this.state.zoomCheck));
 /*        if( prevProps.myZoom != this.props.myZoom && this.props.myZoom >= this.state.zoomSet){
          //   this.fetchShouts();
-        }else */if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) >= .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) >= .03 ){
+        }else */if (this.props.myZoom >= this.state.zoomSet && Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) >= .04 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) >= .04 ){
             console.log(this.props.myZoom);
-            debounce(300, this.fetchShouts());
-        }else if (this.props.myZoom < this.state.zoomSet || Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .03 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .03){
 
-        }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > 1 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > 1){
-            console.log(this.props.myZoom);
-            debounce(300, this.fetchShouts());
+
+            this.debouncedOnChangeFetch();
+           // debounce(10, this.fetchShouts);
+        }else if (this.props.myZoom < this.state.zoomSet || Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) < .04 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) < .04){
+
+        }else if (Math.abs(prevProps.theMapCenter[0]- this.props.theMapCenter[0]) > 1.5 || Math.abs(prevProps.theMapCenter[1]- this.props.theMapCenter[1]) > 1.5){
+          //  console.log(this.props.myZoom);
+            this.debouncedOnChangeFetch();
+          //  debounce(10, this.fetchShouts);
         }
     }
 

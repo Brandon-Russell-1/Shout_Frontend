@@ -249,7 +249,7 @@ class App extends Component {
                     <Progress
                         theme={{
                             success: {
-                                symbol: '',//🏄
+                                symbol: '🏄',//🏄
                                 color: '#181899'
                             },
                             active: {

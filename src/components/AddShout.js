@@ -171,7 +171,12 @@ class AddShout extends React.Component {
                         <TextField label="Shout Entry" placeholder="shoutEntry" name="shoutEntry" onChange={this.handleChange} fullWidth  />
                         <br/>
                         <br/>
-                        <input type="file" onChange={this.fileChangedHandler} accept=".png,.jpg,.gif,.jpeg"/>
+{/*                        <div className="image-upload">
+                            <label htmlFor="file-input">
+                                <img src="http://goo.gl/pB9rpQ"/>
+                            </label>*/}
+                        <input  id="file-input" type="file" onChange={this.fileChangedHandler} accept=".png,.jpg,.gif,.jpeg"/>
+   {/*                     </div>*/}
                         <br/>
                         <br/>
                         <Button variant="outlined" style={{marginRight: 10}} color="primary" onClick={this.handleSubmit}>Save</Button>
